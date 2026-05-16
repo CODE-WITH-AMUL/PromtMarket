@@ -1,0 +1,96 @@
+# =========================
+# Django .gitignore
+# =========================
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Django
+*.log
+*.pot
+*.pyc
+db.sqlite3
+*.sqlite3
+media/
+
+# Static Files
+staticfiles/
+
+# Environment Variables
+.env
+.env.*
+
+# VS Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# Mac
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Migrations (optional)
+# */migrations/*.py
+# !*/migrations/__init__.py
+
+# Node Modules
+node_modules/
+
+# Build Files
+dist/
+build/
+
+# Temporary Files
+*.tmp
+*.bak
+
+# Logs
+logs/
+*.log
+
+# Gunicorn
+gunicorn.pid
+
+# Render
+.render/
+
+# Docker
+*.pid
+*.seed
+*.pid.lock
+
+# SQLite Database
+db.sqlite3
+
+# Cache
+.cache/
+
+# MyPy
+.mypy_cache/
+
+# Ruff
+.ruff_cache/
+
+# Pyre
+.pyre/
+
+# Coverage
+.coverage.*

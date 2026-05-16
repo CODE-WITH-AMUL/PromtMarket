@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prompt Market</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, Helvetica, sans-serif;
+        }
+
+        body{
+            background:#0f172a;
+            color:white;
+        }
+
+        nav{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            padding:20px 10%;
+            background:#111827;
+        }
+
+        .logo{
+            font-size:28px;
+            font-weight:bold;
+            color:#38bdf8;
+        }
+
+        nav ul{
+            display:flex;
+            gap:20px;
+            list-style:none;
+        }
+
+        nav ul li a{
+            text-decoration:none;
+            color:white;
+            transition:0.3s;
+        }
+
+        nav ul li a:hover{
+            color:#38bdf8;
+        }
+
+        .hero{
+            height:90vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            text-align:center;
+            padding:20px;
+        }
+
+        .hero-content h1{
+            font-size:60px;
+            margin-bottom:20px;
+        }
+
+        .hero-content p{
+            font-size:20px;
+            color:#cbd5e1;
+            margin-bottom:30px;
+        }
+
+        .btn{
+            padding:15px 35px;
+            border:none;
+            background:#38bdf8;
+            color:black;
+            font-size:18px;
+            border-radius:10px;
+            cursor:pointer;
+            transition:0.3s;
+            font-weight:bold;
+        }
+
+        .btn:hover{
+            background:#0ea5e9;
+            transform:scale(1.05);
+        }
+
+        .features{
+            padding:80px 10%;
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+            gap:30px;
+        }
+
+        .card{
+            background:#1e293b;
+            padding:30px;
+            border-radius:15px;
+            transition:0.3s;
+        }
+
+        .card:hover{
+            transform:translateY(-10px);
+        }
+
+        .card h2{
+            margin-bottom:15px;
+            color:#38bdf8;
+        }
+
+        footer{
+            text-align:center;
+            padding:20px;
+            background:#111827;
+            color:#94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">PromptMarket</div>
+
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Prompts</a></li>
+            <li><a href="#">Categories</a></li>
+            <li><a href="#">Login</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Buy & Sell AI Prompts</h1>
+
+            <p>
+                Discover powerful AI prompts for ChatGPT, Midjourney,
+                coding, business, design, and more.
+            </p>
+
+            <button class="btn">Explore Prompts</button>
+        </div>
+    </section>
+
+    <section class="features">
+
+        <div class="card">
+            <h2>🔥 Trending Prompts</h2>
+            <p>
+                Explore the latest and most popular AI prompts
+                created by professionals.
+            </p>
+        </div>
+
+        <div class="card">
+            <h2>💻 Developer Prompts</h2>
+            <p>
+                Find coding, debugging, Django, AI engineering,
+                and backend development prompts.
+            </p>
+        </div>
+
+        <div class="card">
+            <h2>🎨 Creative AI</h2>
+            <p>
+                Generate art, logos, content, videos,
+                and marketing ideas using AI prompts.
+            </p>
+        </div>
+
+    </section>
+
+    <footer>
+        © 2026 PromptMarket | All Rights Reserved
+    </footer>
+
+</body>
+</html>

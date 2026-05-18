@@ -1,178 +1,738 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Prompt Market</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PromptForge — AI Prompt Enhancement Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-    <style>
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:Arial, Helvetica, sans-serif;
-        }
+  :root {
+    --black: #0a0a0a;
+    --white: #fafafa;
+    --gray-100: #f2f2f2;
+    --gray-200: #e0e0e0;
+    --gray-400: #aaaaaa;
+    --gray-600: #666666;
+    --serif: 'DM Serif Display', serif;
+    --sans: 'Instrument Sans', sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
 
-        body{
-            background:#0f172a;
-            color:white;
-        }
+  html { scroll-behavior: smooth; }
 
-        nav{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            padding:20px 10%;
-            background:#111827;
-        }
+  body {
+    background: var(--white);
+    color: var(--black);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
 
-        .logo{
-            font-size:28px;
-            font-weight:bold;
-            color:#38bdf8;
-        }
+  /* ---- NOISE OVERLAY ---- */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9999; opacity: .5;
+  }
 
-        nav ul{
-            display:flex;
-            gap:20px;
-            list-style:none;
-        }
+  /* ---- LAYOUT ---- */
+  .container { max-width: 1160px; margin: 0 auto; padding: 0 2rem; }
 
-        nav ul li a{
-            text-decoration:none;
-            color:white;
-            transition:0.3s;
-        }
+  /* ---- HEADER ---- */
+  header {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--white);
+    border-bottom: 1px solid var(--black);
+    padding: 0;
+  }
+  .header-inner {
+    display: flex; align-items: stretch; justify-content: space-between;
+    height: 56px;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--serif); font-size: 1.25rem;
+    border-right: 1px solid var(--black); padding: 0 1.5rem;
+    text-decoration: none; color: var(--black);
+    letter-spacing: -0.01em;
+  }
+  .logo-mark {
+    width: 28px; height: 28px; background: var(--black);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: .75rem; color: var(--white);
+    font-weight: 500; letter-spacing: 0;
+  }
+  nav {
+    display: flex; align-items: stretch;
+  }
+  nav a {
+    display: flex; align-items: center;
+    padding: 0 1.25rem;
+    font-size: .8rem; font-weight: 500; letter-spacing: .05em; text-transform: uppercase;
+    color: var(--gray-600); text-decoration: none;
+    border-left: 1px solid var(--gray-200);
+    transition: background .15s, color .15s;
+  }
+  nav a:hover { background: var(--gray-100); color: var(--black); }
+  .nav-cta {
+    background: var(--black) !important; color: var(--white) !important;
+    border-left: 1px solid var(--black) !important;
+    font-weight: 600 !important;
+    transition: opacity .15s !important;
+  }
+  .nav-cta:hover { opacity: .85 !important; background: var(--black) !important; }
 
-        nav ul li a:hover{
-            color:#38bdf8;
-        }
+  /* ---- HERO ---- */
+  .hero {
+    border-bottom: 1px solid var(--black);
+    display: grid; grid-template-columns: 1fr 1fr;
+    min-height: 520px;
+  }
+  .hero-left {
+    border-right: 1px solid var(--black);
+    padding: 4rem 3rem;
+    display: flex; flex-direction: column; justify-content: space-between;
+    position: relative; overflow: hidden;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: .72rem; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--gray-600);
+    margin-bottom: 2rem;
+  }
+  .hero-tag::before {
+    content: ''; width: 8px; height: 8px;
+    background: var(--black); border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: .6; }
+  }
+  .hero h1 {
+    font-family: var(--serif); font-size: clamp(2.8rem, 5vw, 4.2rem);
+    line-height: 1.05; letter-spacing: -0.02em;
+    color: var(--black); margin-bottom: 1.5rem;
+  }
+  .hero h1 em { font-style: italic; }
+  .hero-sub {
+    font-size: 1rem; color: var(--gray-600); line-height: 1.7;
+    max-width: 420px; margin-bottom: 2.5rem;
+  }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 24px; font-family: var(--sans);
+    font-size: .875rem; font-weight: 600; letter-spacing: .02em;
+    text-decoration: none; cursor: pointer; border: none;
+    transition: all .2s;
+  }
+  .btn-black {
+    background: var(--black); color: var(--white);
+  }
+  .btn-black:hover { background: #333; }
+  .btn-outline {
+    background: transparent; color: var(--black);
+    border: 1px solid var(--black);
+  }
+  .btn-outline:hover { background: var(--black); color: var(--white); }
+  .hero-bg-num {
+    position: absolute; bottom: -1rem; right: -0.5rem;
+    font-family: var(--serif); font-size: 14rem;
+    line-height: 1; color: var(--gray-200); pointer-events: none;
+    user-select: none; z-index: 0;
+  }
+  .hero-right {
+    display: grid; grid-template-rows: 1fr 1fr;
+  }
+  .hero-stat {
+    padding: 2.5rem; border-bottom: 1px solid var(--black);
+    display: flex; flex-direction: column; justify-content: center;
+    transition: background .2s;
+  }
+  .hero-stat:hover { background: var(--gray-100); }
+  .hero-stat:last-child { border-bottom: none; }
+  .stat-val {
+    font-family: var(--serif); font-size: 3.5rem;
+    line-height: 1; letter-spacing: -0.03em; margin-bottom: .4rem;
+  }
+  .stat-label { font-size: .82rem; color: var(--gray-600); letter-spacing: .03em; }
 
-        .hero{
-            height:90vh;
-            display:flex;
-            justify-content:center;
-            align-items:center;
-            text-align:center;
-            padding:20px;
-        }
+  /* ---- TICKER ---- */
+  .ticker {
+    border-bottom: 1px solid var(--black);
+    overflow: hidden; white-space: nowrap;
+    background: var(--black); color: var(--white);
+    padding: 10px 0;
+  }
+  .ticker-inner {
+    display: inline-flex; gap: 0;
+    animation: ticker 22s linear infinite;
+  }
+  .ticker-item {
+    display: inline-flex; align-items: center; gap: 16px;
+    font-family: var(--mono); font-size: .72rem; letter-spacing: .08em;
+    text-transform: uppercase; padding: 0 2rem; color: #ccc;
+  }
+  .ticker-item::after { content: '◆'; color: #555; }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-        .hero-content h1{
-            font-size:60px;
-            margin-bottom:20px;
-        }
+  /* ---- SECTION WRAPPERS ---- */
+  .section {
+    border-bottom: 1px solid var(--black);
+  }
+  .section-header {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding: 2.5rem 0 1.5rem;
+    border-bottom: 1px solid var(--gray-200);
+    margin-bottom: 2.5rem;
+  }
+  .section-label {
+    font-family: var(--mono); font-size: .72rem; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--gray-400);
+  }
+  .section-num {
+    font-family: var(--serif); font-size: 1rem; color: var(--gray-200);
+  }
+  .section-title {
+    font-family: var(--serif); font-size: clamp(1.8rem, 3vw, 2.6rem);
+    letter-spacing: -0.02em; line-height: 1.15;
+  }
+  .section-title em { font-style: italic; }
 
-        .hero-content p{
-            font-size:20px;
-            color:#cbd5e1;
-            margin-bottom:30px;
-        }
+  /* ---- FEATURES ---- */
+  .features-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    border-top: 1px solid var(--gray-200);
+  }
+  .feat {
+    padding: 2rem 2rem 2.5rem;
+    border-right: 1px solid var(--gray-200);
+    border-bottom: 1px solid var(--gray-200);
+    position: relative; overflow: hidden;
+    transition: background .2s;
+  }
+  .feat:nth-child(2n) { border-right: none; }
+  .feat:nth-child(n+3) { border-bottom: none; }
+  .feat:hover { background: var(--gray-100); }
+  .feat-num {
+    font-family: var(--mono); font-size: .7rem; letter-spacing: .1em;
+    color: var(--gray-400); margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .feat-num::after { content: ''; flex: 1; height: 1px; background: var(--gray-200); }
+  .feat h3 {
+    font-family: var(--serif); font-size: 1.35rem;
+    letter-spacing: -0.01em; margin-bottom: .75rem;
+  }
+  .feat p { font-size: .9rem; color: var(--gray-600); line-height: 1.7; }
 
-        .btn{
-            padding:15px 35px;
-            border:none;
-            background:#38bdf8;
-            color:black;
-            font-size:18px;
-            border-radius:10px;
-            cursor:pointer;
-            transition:0.3s;
-            font-weight:bold;
-        }
+  /* ---- STEPS ---- */
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .step {
+    padding: 2.5rem 2rem;
+    border-right: 1px solid var(--gray-200);
+    position: relative; transition: background .2s;
+  }
+  .step:last-child { border-right: none; }
+  .step:hover { background: var(--gray-100); }
+  .step-num-big {
+    font-family: var(--serif); font-size: 4.5rem; line-height: 1;
+    color: var(--gray-200); margin-bottom: 1.5rem;
+    transition: color .2s;
+  }
+  .step:hover .step-num-big { color: var(--gray-400); }
+  .step h4 {
+    font-family: var(--serif); font-size: 1.15rem;
+    margin-bottom: .6rem; letter-spacing: -0.01em;
+  }
+  .step p { font-size: .85rem; color: var(--gray-600); line-height: 1.65; }
 
-        .btn:hover{
-            background:#0ea5e9;
-            transform:scale(1.05);
-        }
+  /* ---- DEMO ---- */
+  .demo-section { padding-bottom: 0; }
+  .demo-ui {
+    border: 1px solid var(--black); background: var(--white);
+    overflow: hidden;
+  }
+  .demo-topbar {
+    display: flex; align-items: center;
+    background: var(--black); color: var(--white);
+    padding: 0;
+  }
+  .demo-tab {
+    padding: 14px 24px; font-family: var(--mono);
+    font-size: .72rem; letter-spacing: .08em; text-transform: uppercase;
+    cursor: pointer; border-right: 1px solid #333;
+    color: #888; transition: all .15s;
+    user-select: none;
+  }
+  .demo-tab.active { background: var(--white); color: var(--black); }
+  .demo-tab:hover:not(.active) { background: #111; color: #ccc; }
+  .demo-body { display: grid; grid-template-columns: 1fr 1fr; }
+  .demo-pane {
+    padding: 2rem;
+  }
+  .demo-pane:first-child { border-right: 1px solid var(--black); }
+  .demo-pane-label {
+    font-family: var(--mono); font-size: .68rem; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--gray-400);
+    margin-bottom: 1.25rem; display: flex; align-items: center; gap: 8px;
+  }
+  .label-dot { width: 6px; height: 6px; border-radius: 50%; }
+  .label-dot.bad { background: #ccc; }
+  .label-dot.good { background: var(--black); }
+  .demo-code {
+    font-family: var(--mono); font-size: .8rem; line-height: 1.75;
+    color: var(--black); white-space: pre-wrap; word-break: break-word;
+  }
+  .kw { font-weight: 500; }
+  .cm { color: var(--gray-400); }
+  .str { text-decoration: underline; text-underline-offset: 2px; }
 
-        .features{
-            padding:80px 10%;
-            display:grid;
-            grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-            gap:30px;
-        }
+  /* ---- WHY SECTION ---- */
+  .why-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0; }
+  .why-item {
+    padding: 2.5rem 2rem;
+    border-right: 1px solid var(--gray-200);
+    border-bottom: 1px solid var(--gray-200);
+    transition: background .2s;
+  }
+  .why-item:hover { background: var(--gray-100); }
+  .why-item:nth-child(2n) { border-right: none; }
+  .why-item:nth-last-child(-n+2) { border-bottom: none; }
+  .why-icon {
+    font-family: var(--mono); font-size: 1.5rem;
+    margin-bottom: 1rem; display: block;
+  }
+  .why-item h4 {
+    font-family: var(--serif); font-size: 1.15rem;
+    margin-bottom: .5rem; letter-spacing: -0.01em;
+  }
+  .why-item p { font-size: .875rem; color: var(--gray-600); line-height: 1.65; }
 
-        .card{
-            background:#1e293b;
-            padding:30px;
-            border-radius:15px;
-            transition:0.3s;
-        }
+  /* ---- CTA ---- */
+  .cta-section {
+    padding: 5rem 0; text-align: center;
+    border-bottom: none;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 1.5rem; position: relative; overflow: hidden;
+  }
+  .cta-section::before {
+    content: 'PF';
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--serif); font-size: 30vw; line-height: 1;
+    color: var(--gray-100); pointer-events: none; user-select: none;
+    white-space: nowrap;
+  }
+  .cta-section h2 {
+    font-family: var(--serif); font-size: clamp(2rem, 4vw, 3.2rem);
+    letter-spacing: -0.03em; position: relative; z-index: 1;
+  }
+  .cta-section h2 em { font-style: italic; }
+  .cta-section p {
+    font-size: .95rem; color: var(--gray-600); position: relative; z-index: 1;
+  }
+  .cta-section .btn { position: relative; z-index: 1; }
 
-        .card:hover{
-            transform:translateY(-10px);
-        }
+  /* ---- FOOTER ---- */
+  footer {
+    border-top: 1px solid var(--black);
+    display: flex; align-items: stretch; justify-content: space-between;
+  }
+  .footer-brand {
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--serif); font-size: 1rem;
+    padding: 1.25rem 1.5rem; border-right: 1px solid var(--gray-200);
+  }
+  .footer-links {
+    display: flex; align-items: stretch;
+  }
+  .footer-links a {
+    display: flex; align-items: center;
+    padding: 0 1.25rem; font-size: .78rem; font-weight: 500;
+    letter-spacing: .05em; text-transform: uppercase;
+    color: var(--gray-600); text-decoration: none;
+    border-left: 1px solid var(--gray-200);
+    transition: background .15s, color .15s;
+  }
+  .footer-links a:hover { background: var(--gray-100); color: var(--black); }
+  .footer-copy {
+    display: flex; align-items: center;
+    padding: 0 1.5rem; border-left: 1px solid var(--gray-200);
+    font-family: var(--mono); font-size: .72rem; color: var(--gray-400);
+    letter-spacing: .04em;
+  }
 
-        .card h2{
-            margin-bottom:15px;
-            color:#38bdf8;
-        }
+  /* ---- SCROLL ANIMATIONS ---- */
+  [data-fade] {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1);
+  }
+  [data-fade].visible {
+    opacity: 1; transform: translateY(0);
+  }
 
-        footer{
-            text-align:center;
-            padding:20px;
-            background:#111827;
-            color:#94a3b8;
-        }
-    </style>
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-left { border-right: none; border-bottom: 1px solid var(--black); }
+    .hero-right { grid-template-rows: auto auto; }
+    .hero-stat { border-right: 1px solid var(--black); }
+    .hero-right { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+    .hero-stat:last-child { border-bottom: none; border-right: none; }
+    .features-grid { grid-template-columns: 1fr; }
+    .feat { border-right: none !important; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .step:nth-child(2) { border-right: none; }
+    .step:nth-child(2), .step:nth-child(4) { border-right: none; }
+    .step:nth-child(3), .step:nth-child(4) { border-top: 1px solid var(--gray-200); }
+    .demo-body { grid-template-columns: 1fr; }
+    .demo-pane:first-child { border-right: none; border-bottom: 1px solid var(--black); }
+    nav a:not(.nav-cta) { display: none; }
+  }
+  @media (max-width: 600px) {
+    .logo span { display: none; }
+    .steps { grid-template-columns: 1fr; }
+    .step { border-right: none; border-bottom: 1px solid var(--gray-200); }
+    .step:last-child { border-bottom: none; }
+    .why-grid { grid-template-columns: 1fr; }
+    .why-item { border-right: none !important; }
+    .hero-right { grid-template-columns: 1fr; }
+    .hero-stat { border-right: none; }
+  }
+</style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo">PromptMarket</div>
+<!-- HEADER -->
+<header>
+  <div class="container">
+    <div class="header-inner">
+      <a href="#" class="logo">
+        <div class="logo-mark">PF</div>
+        <span>PromptForge</span>
+      </a>
+      <nav>
+        <a href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a href="#demo">Demo</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#" class="nav-cta">Try free →</a>
+      </nav>
+    </div>
+  </div>
+</header>
 
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Prompts</a></li>
-            <li><a href="#">Categories</a></li>
-            <li><a href="#">Login</a></li>
-        </ul>
-    </nav>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left" data-fade>
+    <div>
+      <div class="hero-tag">Public beta — no card required</div>
+      <h1>From rough prompt<br>to <em>production-grade</em><br>output.</h1>
+      <p class="hero-sub">PromptForge instantly enhances your AI instructions, cleans messy datasets, and generates robust, deployable code — all within a unified workflow engine.</p>
+      <div class="hero-actions">
+        <a href="#" class="btn btn-black">Try PromptForge Free</a>
+        <a href="#demo" class="btn btn-outline">Watch Demo</a>
+      </div>
+    </div>
+    <div class="hero-bg-num">01</div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-stat" data-fade>
+      <div class="stat-val">10×</div>
+      <div class="stat-label">Faster prompt iteration vs manual rewrites</div>
+    </div>
+    <div class="hero-stat" data-fade>
+      <div class="stat-val">98%</div>
+      <div class="stat-label">Output consistency with structured enhancement</div>
+    </div>
+  </div>
+</section>
 
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Buy & Sell AI Prompts</h1>
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-inner" id="ticker">
+    <span class="ticker-item">AI Prompt Enhancement</span>
+    <span class="ticker-item">Production-Grade Code</span>
+    <span class="ticker-item">Dataset Cleaning</span>
+    <span class="ticker-item">Workflow Automation</span>
+    <span class="ticker-item">GPT-4 Compatible</span>
+    <span class="ticker-item">Claude Compatible</span>
+    <span class="ticker-item">Open Source Models</span>
+    <span class="ticker-item">CSV &amp; JSON Support</span>
+    <span class="ticker-item">GitHub Integration</span>
+    <span class="ticker-item">VS Code Extension</span>
+    <span class="ticker-item">AI Prompt Enhancement</span>
+    <span class="ticker-item">Production-Grade Code</span>
+    <span class="ticker-item">Dataset Cleaning</span>
+    <span class="ticker-item">Workflow Automation</span>
+    <span class="ticker-item">GPT-4 Compatible</span>
+    <span class="ticker-item">Claude Compatible</span>
+    <span class="ticker-item">Open Source Models</span>
+    <span class="ticker-item">CSV &amp; JSON Support</span>
+    <span class="ticker-item">GitHub Integration</span>
+    <span class="ticker-item">VS Code Extension</span>
+  </div>
+</div>
 
-            <p>
-                Discover powerful AI prompts for ChatGPT, Midjourney,
-                coding, business, design, and more.
-            </p>
+<!-- FEATURES -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-label">Features</div>
+        <h2 class="section-title">Engineered for <em>precision</em></h2>
+      </div>
+      <div class="section-num">01 / 04</div>
+    </div>
+    <div class="features-grid" data-fade>
+      <div class="feat">
+        <div class="feat-num">01 — Enhancement</div>
+        <h3>AI Prompt Enhancement</h3>
+        <p>Automatically refines ambiguous prompts into structured, context-rich instructions that GPT-4, Claude, and open-source models understand perfectly. No guesswork.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-num">02 — Generation</div>
+        <h3>Production-Grade Code</h3>
+        <p>Transforms pseudo-code or natural language descriptions into clean, documented, scalable code following best practices for React, Python, and Node.js.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-num">03 — Cleaning</div>
+        <h3>Dataset Cleaning Support</h3>
+        <p>Detect duplicates, fix formatting inconsistencies, and normalize CSV/JSON datasets before they poison your fine-tuning or analytics pipelines.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-num">04 — Automation</div>
+        <h3>Workflow Improvement</h3>
+        <p>Chain multiple enhancement steps, apply templates, and integrate with GitHub or APIs for a seamless CI/CD-friendly AI workflow engine.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-            <button class="btn">Explore Prompts</button>
+<!-- HOW IT WORKS -->
+<section class="section" id="how">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-label">Process</div>
+        <h2 class="section-title">How it <em>works</em></h2>
+      </div>
+      <div class="section-num">02 / 04</div>
+    </div>
+    <div class="steps" data-fade>
+      <div class="step">
+        <div class="step-num-big">1</div>
+        <h4>Paste your prompt</h4>
+        <p>Drop your raw AI instruction, code snippet, or dataset sample into the editor.</p>
+      </div>
+      <div class="step">
+        <div class="step-num-big">2</div>
+        <h4>Select enhancement mode</h4>
+        <p>Choose from code generation, prompt optimization, or data cleaning profiles.</p>
+      </div>
+      <div class="step">
+        <div class="step-num-big">3</div>
+        <h4>AI refines &amp; validates</h4>
+        <p>The engine analyzes context, fills gaps, and applies production-ready patterns.</p>
+      </div>
+      <div class="step">
+        <div class="step-num-big">4</div>
+        <h4>Export &amp; integrate</h4>
+        <p>Copy, download, or push directly to your repo or API endpoint seamlessly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO -->
+<section class="section demo-section" id="demo">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-label">Demo</div>
+        <h2 class="section-title">See the <em>transformation</em></h2>
+      </div>
+      <div class="section-num">03 / 04</div>
+    </div>
+    <div class="demo-ui" data-fade>
+      <div class="demo-topbar">
+        <div class="demo-tab active" data-tab="code">Code generation</div>
+        <div class="demo-tab" data-tab="prompt">Prompt enhancement</div>
+        <div class="demo-tab" data-tab="data">Data cleaning</div>
+      </div>
+      <div class="demo-body" id="demo-code">
+        <div class="demo-pane">
+          <div class="demo-pane-label"><span class="label-dot bad"></span> Input — vague</div>
+          <div class="demo-code">"Write a function to get user data
+and show it. Also clean the csv
+i have."</div>
         </div>
-    </section>
-
-    <section class="features">
-
-        <div class="card">
-            <h2>🔥 Trending Prompts</h2>
-            <p>
-                Explore the latest and most popular AI prompts
-                created by professionals.
-            </p>
+        <div class="demo-pane">
+          <div class="demo-pane-label"><span class="label-dot good"></span> Output — production-ready</div>
+          <div class="demo-code"><span class="cm">// Async fetch with full error handling</span>
+<span class="kw">async function</span> fetchUserData(userId) {
+  <span class="kw">try</span> {
+    <span class="kw">const</span> res = <span class="kw">await</span> fetch(
+      <span class="str">`/api/users/${userId}`</span>
+    );
+    <span class="kw">if</span> (!res.ok)
+      <span class="kw">throw new</span> Error(<span class="str">'Network error'</span>);
+    <span class="kw">return await</span> res.json();
+  } <span class="kw">catch</span> (err) {
+    console.error(<span class="str">'Fetch failed'</span>, err);
+    <span class="kw">return null</span>;
+  }
+}
+<span class="cm">// Dataset: remove null rows,
+// normalize date columns.</span></div>
         </div>
-
-        <div class="card">
-            <h2>💻 Developer Prompts</h2>
-            <p>
-                Find coding, debugging, Django, AI engineering,
-                and backend development prompts.
-            </p>
+      </div>
+      <div class="demo-body" id="demo-prompt" style="display:none">
+        <div class="demo-pane">
+          <div class="demo-pane-label"><span class="label-dot bad"></span> Input — vague</div>
+          <div class="demo-code">"Summarize this article for me."</div>
         </div>
+        <div class="demo-pane">
+          <div class="demo-pane-label"><span class="label-dot good"></span> Output — structured</div>
+          <div class="demo-code"><span class="cm">// Role + format + audience defined</span>
+You are an expert summarizer.
 
-        <div class="card">
-            <h2>🎨 Creative AI</h2>
-            <p>
-                Generate art, logos, content, videos,
-                and marketing ideas using AI prompts.
-            </p>
+Given the article below, return:
+<span class="kw">1.</span> A 2-sentence executive summary
+<span class="kw">2.</span> 3 key takeaways (bullet list)
+<span class="kw">3.</span> Sentiment: positive / neutral /
+   negative
+
+<span class="kw">Format:</span> Markdown
+<span class="kw">Audience:</span> non-technical stakeholders
+<span class="kw">Tone:</span> concise, professional
+
+<span class="str">[Article text here]</span></div>
         </div>
+      </div>
+      <div class="demo-body" id="demo-data" style="display:none">
+        <div class="demo-pane">
+          <div class="demo-pane-label"><span class="label-dot bad"></span> Input — messy CSV</div>
+          <div class="demo-code">name,email,date,revenue
+<span class="cm">John,,2023/1/5,1200</span>
+Jane,j@co.com,,890.50
+<span class="cm">John,,2023/1/5,1200</span>
+<span class="cm">,,invalid,</span>
+Bob,b@co.com,2023-02-10,3400</div>
+        </div>
+        <div class="demo-pane">
+          <div class="demo-pane-label"><span class="label-dot good"></span> Output — clean dataset</div>
+          <div class="demo-code"><span class="cm">// Removed 2 duplicates
+// Fixed 1 missing email
+// Normalized 3 date formats
+// Dropped 1 invalid row</span>
 
-    </section>
+name,email,date,revenue
+<span class="kw">Jane</span>,j@co.com,<span class="kw">2023-01-05</span>,890.50
+<span class="kw">Bob</span>,b@co.com,<span class="kw">2023-02-10</span>,3400.00
+<span class="kw">John</span>,<span class="str">john@inferred.com</span>,<span class="kw">2023-01-05</span>,1200.00</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <footer>
-        © 2026 PromptMarket | All Rights Reserved
-    </footer>
+<!-- WHY PROMPTFORGE -->
+<section class="section" id="pricing">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-label">Benefits</div>
+        <h2 class="section-title">Why <em>PromptForge</em>?</h2>
+      </div>
+      <div class="section-num">04 / 04</div>
+    </div>
+    <div class="why-grid" data-fade>
+      <div class="why-item">
+        <span class="why-icon">⟳</span>
+        <h4>10× faster iteration</h4>
+        <p>Stop manually rewriting prompts. Get optimized versions in under 2 seconds, every time.</p>
+      </div>
+      <div class="why-item">
+        <span class="why-icon">◈</span>
+        <h4>Consistent output quality</h4>
+        <p>Eliminate randomness with structured enhancement templates that apply proven patterns.</p>
+      </div>
+      <div class="why-item">
+        <span class="why-icon">⊕</span>
+        <h4>Seamless integrations</h4>
+        <p>Works with OpenAI API, VS Code, GitHub Actions, and your existing data infrastructure.</p>
+      </div>
+      <div class="why-item">
+        <span class="why-icon">⊘</span>
+        <h4>Enterprise-grade privacy</h4>
+        <p>Your prompts and data never leave your secure environment. SOC 2 compliant.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Start forging<br><em>better prompts</em> today.</h2>
+  <p>Free plan. No credit card required. Upgrade anytime.</p>
+  <a href="#" class="btn btn-black" style="font-size:1rem; padding:16px 36px;">Try PromptForge Free →</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container" style="display:flex; align-items:stretch; justify-content:space-between; width:100%;">
+    <div class="footer-brand">
+      <div class="logo-mark">PF</div>
+      PromptForge
+    </div>
+    <div style="display:flex; align-items:stretch;">
+      <div class="footer-links">
+        <a href="{% url 'docs' %}">Docs</a>
+        <a href="#">API</a>
+        <a href="#">Privacy</a>
+        <a href="#">Contact</a>
+      </div>
+      <div class="footer-copy">© 2025</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ---- DEMO TABS ----
+  document.querySelectorAll('.demo-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.demo-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      var name = tab.getAttribute('data-tab');
+      ['code','prompt','data'].forEach(function(id) {
+        document.getElementById('demo-' + id).style.display = id === name ? 'grid' : 'none';
+      });
+    });
+  });
+
+  // ---- SCROLL FADE IN ----
+  var faders = document.querySelectorAll('[data-fade]');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  faders.forEach(function(el) { observer.observe(el); });
+
+  // ---- TICKER CLONE (seamless loop) ----
+  var ticker = document.getElementById('ticker');
+  ticker.innerHTML += ticker.innerHTML;
+</script>
 </body>
 </html>

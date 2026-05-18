@@ -17,7 +17,7 @@ env = environ.Env(
 )
 
 # read .env file
-environ.Env.read_env(BASE_DIR / '.env')
+environ.Env.read_env(str(BASE_DIR / '.env'))
 
 
 # =========================
@@ -101,11 +101,11 @@ WSGI_APPLICATION = 'Promt.wsgi.application'
 # =========================
 
 DATABASES = {
-    'default': env.db(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
-    )
+    'default': {
+        'ENGINE': env('DATABASE_ENGINE'),
+        'NAME': BASE_DIR / env('DATABASE_NAME'),
+    }
 }
-
 
 # =========================
 # PASSWORD VALIDATION

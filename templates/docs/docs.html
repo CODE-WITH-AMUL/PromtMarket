@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PromptForge Docs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+	*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+	:root {
+		--black: #0a0a0a;
+		--white: #fafafa;
+		--gray-100: #f2f2f2;
+		--gray-200: #e0e0e0;
+		--gray-400: #aaaaaa;
+		--gray-600: #666666;
+		--serif: 'DM Serif Display', serif;
+		--sans: 'Instrument Sans', sans-serif;
+		--mono: 'DM Mono', monospace;
+	}
+
+	html { scroll-behavior: smooth; }
+
+	body {
+		background: var(--white);
+		color: var(--black);
+		font-family: var(--sans);
+		-webkit-font-smoothing: antialiased;
+		overflow-x: hidden;
+	}
+
+	body::before {
+		content: '';
+		position: fixed; inset: 0;
+		background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+		pointer-events: none; z-index: 9999; opacity: .5;
+	}
+
+	.container { max-width: 1160px; margin: 0 auto; padding: 0 2rem; }
+
+	header {
+		position: sticky; top: 0; z-index: 100;
+		background: var(--white);
+		border-bottom: 1px solid var(--black);
+		padding: 0;
+	}
+	.header-inner {
+		display: flex; align-items: stretch; justify-content: space-between;
+		height: 56px;
+	}
+	.logo {
+		display: flex; align-items: center; gap: 10px;
+		font-family: var(--serif); font-size: 1.25rem;
+		border-right: 1px solid var(--black); padding: 0 1.5rem;
+		text-decoration: none; color: var(--black);
+		letter-spacing: -0.01em;
+	}
+	.logo-mark {
+		width: 28px; height: 28px; background: var(--black);
+		display: flex; align-items: center; justify-content: center;
+		font-family: var(--mono); font-size: .75rem; color: var(--white);
+		font-weight: 500; letter-spacing: 0;
+	}
+	nav {
+		display: flex; align-items: stretch;
+	}
+	nav a {
+		display: flex; align-items: center;
+		padding: 0 1.25rem;
+		font-size: .8rem; font-weight: 500; letter-spacing: .05em; text-transform: uppercase;
+		color: var(--gray-600); text-decoration: none;
+		border-left: 1px solid var(--gray-200);
+		transition: background .15s, color .15s;
+	}
+	nav a:hover { background: var(--gray-100); color: var(--black); }
+	.nav-cta {
+		background: var(--black) !important; color: var(--white) !important;
+		border-left: 1px solid var(--black) !important;
+		font-weight: 600 !important;
+		transition: opacity .15s !important;
+	}
+	.nav-cta:hover { opacity: .85 !important; background: var(--black) !important; }
+
+	.hero {
+		border-bottom: 1px solid var(--black);
+		display: grid; grid-template-columns: 1fr 1fr;
+		min-height: 520px;
+	}
+	.hero-left {
+		border-right: 1px solid var(--black);
+		padding: 4rem 3rem;
+		display: flex; flex-direction: column; justify-content: space-between;
+		position: relative; overflow: hidden;
+	}
+	.hero-tag {
+		display: inline-flex; align-items: center; gap: 8px;
+		font-family: var(--mono); font-size: .72rem; letter-spacing: .1em;
+		text-transform: uppercase; color: var(--gray-600);
+		margin-bottom: 2rem;
+	}
+	.hero-tag::before {
+		content: ''; width: 8px; height: 8px;
+		background: var(--black); border-radius: 50%;
+		animation: pulse 2s infinite;
+	}
+	@keyframes pulse {
+		0%, 100% { transform: scale(1); opacity: 1; }
+		50% { transform: scale(1.4); opacity: .6; }
+	}
+	.hero h1 {
+		font-family: var(--serif); font-size: clamp(2.6rem, 5vw, 4rem);
+		line-height: 1.05; letter-spacing: -0.02em;
+		color: var(--black); margin-bottom: 1.5rem;
+	}
+	.hero h1 em { font-style: italic; }
+	.hero-sub {
+		font-size: 1rem; color: var(--gray-600); line-height: 1.7;
+		max-width: 480px; margin-bottom: 2.5rem;
+	}
+	.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+	.btn {
+		display: inline-flex; align-items: center; gap: 8px;
+		padding: 12px 24px; font-family: var(--sans);
+		font-size: .875rem; font-weight: 600; letter-spacing: .02em;
+		text-decoration: none; cursor: pointer; border: none;
+		transition: all .2s;
+	}
+	.btn-black {
+		background: var(--black); color: var(--white);
+	}
+	.btn-black:hover { background: #333; }
+	.btn-outline {
+		background: transparent; color: var(--black);
+		border: 1px solid var(--black);
+	}
+	.btn-outline:hover { background: var(--black); color: var(--white); }
+	.hero-bg-num {
+		position: absolute; bottom: -1rem; right: -0.5rem;
+		font-family: var(--serif); font-size: 14rem;
+		line-height: 1; color: var(--gray-200); pointer-events: none;
+		user-select: none; z-index: 0;
+	}
+	.hero-right {
+		display: grid; grid-template-rows: 1fr 1fr;
+	}
+	.hero-stat {
+		padding: 2.5rem; border-bottom: 1px solid var(--black);
+		display: flex; flex-direction: column; justify-content: center;
+		transition: background .2s;
+	}
+	.hero-stat:hover { background: var(--gray-100); }
+	.hero-stat:last-child { border-bottom: none; }
+	.stat-val {
+		font-family: var(--serif); font-size: 2.4rem;
+		line-height: 1.15; letter-spacing: -0.02em; margin-bottom: .4rem;
+	}
+	.stat-label { font-size: .84rem; color: var(--gray-600); letter-spacing: .03em; }
+
+	.ticker {
+		border-bottom: 1px solid var(--black);
+		overflow: hidden; white-space: nowrap;
+		background: var(--black); color: var(--white);
+		padding: 10px 0;
+	}
+	.ticker-inner {
+		display: inline-flex; gap: 0;
+		animation: ticker 22s linear infinite;
+	}
+	.ticker-item {
+		display: inline-flex; align-items: center; gap: 16px;
+		font-family: var(--mono); font-size: .72rem; letter-spacing: .08em;
+		text-transform: uppercase; padding: 0 2rem; color: #ccc;
+	}
+	.ticker-item::after { content: '◆'; color: #555; }
+	@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+	.section {
+		border-bottom: 1px solid var(--black);
+	}
+	.section-header {
+		display: flex; align-items: baseline; justify-content: space-between;
+		padding: 2.5rem 0 1.5rem;
+		border-bottom: 1px solid var(--gray-200);
+		margin-bottom: 2.5rem;
+	}
+	.section-label {
+		font-family: var(--mono); font-size: .72rem; letter-spacing: .1em;
+		text-transform: uppercase; color: var(--gray-400);
+	}
+	.section-num {
+		font-family: var(--serif); font-size: 1rem; color: var(--gray-200);
+	}
+	.section-title {
+		font-family: var(--serif); font-size: clamp(1.8rem, 3vw, 2.6rem);
+		letter-spacing: -0.02em; line-height: 1.15;
+	}
+
+	.features-grid {
+		display: grid; grid-template-columns: repeat(2, 1fr);
+		border-top: 1px solid var(--gray-200);
+	}
+	.feat {
+		padding: 2rem 2rem 2.5rem;
+		border-right: 1px solid var(--gray-200);
+		border-bottom: 1px solid var(--gray-200);
+		transition: background .2s;
+	}
+	.feat:nth-child(2n) { border-right: none; }
+	.feat:nth-child(n+5) { border-bottom: none; }
+	.feat:hover { background: var(--gray-100); }
+	.feat-num {
+		font-family: var(--mono); font-size: .7rem; letter-spacing: .1em;
+		color: var(--gray-400); margin-bottom: 1.4rem;
+	}
+	.feat h3 {
+		font-family: var(--serif); font-size: 1.35rem;
+		letter-spacing: -0.01em; margin-bottom: .75rem;
+	}
+	.feat p { font-size: .9rem; color: var(--gray-600); line-height: 1.7; }
+
+	.steps { display: grid; grid-template-columns: repeat(4, 1fr); }
+	.step {
+		padding: 2.5rem 2rem;
+		border-right: 1px solid var(--gray-200);
+		transition: background .2s;
+	}
+	.step:last-child { border-right: none; }
+	.step:hover { background: var(--gray-100); }
+	.step-num-big {
+		font-family: var(--serif); font-size: 4.2rem; line-height: 1;
+		color: var(--gray-200); margin-bottom: 1.2rem;
+	}
+	.step h4 {
+		font-family: var(--serif); font-size: 1.15rem;
+		margin-bottom: .6rem; letter-spacing: -0.01em;
+	}
+	.step p { font-size: .85rem; color: var(--gray-600); line-height: 1.65; }
+
+	.doc-shell {
+		border: 1px solid var(--black);
+		background: var(--white);
+		margin-bottom: 2.6rem;
+	}
+	.doc-bar {
+		display: flex; align-items: center;
+		background: var(--black); color: var(--white);
+	}
+	.doc-tab {
+		padding: 14px 20px; font-family: var(--mono);
+		font-size: .72rem; letter-spacing: .08em; text-transform: uppercase;
+		border-right: 1px solid #333; color: #c6c6c6;
+	}
+	.doc-body {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+	}
+	.doc-pane {
+		padding: 2rem;
+	}
+	.doc-pane:first-child { border-right: 1px solid var(--black); }
+	.doc-label {
+		font-family: var(--mono); font-size: .68rem; letter-spacing: .1em;
+		text-transform: uppercase; color: var(--gray-400); margin-bottom: 1rem;
+	}
+	.doc-list {
+		list-style: none;
+		font-size: .9rem;
+		color: var(--gray-600);
+		line-height: 1.8;
+	}
+	.doc-list li { margin-bottom: .35rem; }
+	.doc-code {
+		font-family: var(--mono);
+		font-size: .82rem;
+		background: var(--gray-100);
+		border: 1px solid var(--gray-200);
+		padding: 1rem;
+		white-space: pre-wrap;
+		line-height: 1.75;
+	}
+
+	.why-grid { display: grid; grid-template-columns: repeat(2, 1fr); }
+	.why-item {
+		padding: 2.5rem 2rem;
+		border-right: 1px solid var(--gray-200);
+		border-bottom: 1px solid var(--gray-200);
+		transition: background .2s;
+	}
+	.why-item:hover { background: var(--gray-100); }
+	.why-item:nth-child(2n) { border-right: none; }
+	.why-item:nth-last-child(-n+2) { border-bottom: none; }
+	.why-icon {
+		font-family: var(--mono); font-size: 1.5rem;
+		margin-bottom: .85rem; display: block;
+	}
+	.why-item h4 {
+		font-family: var(--serif); font-size: 1.15rem;
+		margin-bottom: .5rem;
+	}
+	.why-item p { font-size: .875rem; color: var(--gray-600); line-height: 1.65; }
+
+	.cta-section {
+		padding: 5rem 0; text-align: center;
+		border-bottom: none;
+		position: relative; overflow: hidden;
+	}
+	.cta-section::before {
+		content: 'DOCS';
+		position: absolute; top: 50%; left: 50%;
+		transform: translate(-50%, -50%);
+		font-family: var(--serif); font-size: 22vw;
+		color: var(--gray-100); pointer-events: none; user-select: none;
+	}
+	.cta-section h2 {
+		position: relative; z-index: 1;
+		font-family: var(--serif); font-size: clamp(2rem, 4vw, 3.1rem);
+		letter-spacing: -0.03em;
+		margin-bottom: .9rem;
+	}
+	.cta-section p {
+		position: relative; z-index: 1;
+		color: var(--gray-600); margin-bottom: 1.3rem;
+	}
+
+	footer {
+		border-top: 1px solid var(--black);
+		display: flex; align-items: stretch; justify-content: space-between;
+	}
+	.footer-brand {
+		display: flex; align-items: center; gap: 10px;
+		font-family: var(--serif); font-size: 1rem;
+		padding: 1.25rem 1.5rem; border-right: 1px solid var(--gray-200);
+	}
+	.footer-links {
+		display: flex; align-items: stretch;
+	}
+	.footer-links a {
+		display: flex; align-items: center;
+		padding: 0 1.25rem; font-size: .78rem; font-weight: 500;
+		letter-spacing: .05em; text-transform: uppercase;
+		color: var(--gray-600); text-decoration: none;
+		border-left: 1px solid var(--gray-200);
+		transition: background .15s, color .15s;
+	}
+	.footer-links a:hover { background: var(--gray-100); color: var(--black); }
+	.footer-copy {
+		display: flex; align-items: center;
+		padding: 0 1.5rem; border-left: 1px solid var(--gray-200);
+		font-family: var(--mono); font-size: .72rem; color: var(--gray-400);
+	}
+
+	[data-fade] {
+		opacity: 0; transform: translateY(24px);
+		transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1);
+	}
+	[data-fade].visible {
+		opacity: 1; transform: translateY(0);
+	}
+
+	@media (max-width: 900px) {
+		.hero { grid-template-columns: 1fr; }
+		.hero-left { border-right: none; border-bottom: 1px solid var(--black); }
+		.hero-right { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+		.hero-stat:last-child { border-bottom: none; border-right: none; }
+		.features-grid { grid-template-columns: 1fr; }
+		.feat { border-right: none !important; }
+		.steps { grid-template-columns: 1fr 1fr; }
+		.step:nth-child(2), .step:nth-child(4) { border-right: none; }
+		.step:nth-child(3), .step:nth-child(4) { border-top: 1px solid var(--gray-200); }
+		.doc-body { grid-template-columns: 1fr; }
+		.doc-pane:first-child { border-right: none; border-bottom: 1px solid var(--black); }
+		nav a:not(.nav-cta) { display: none; }
+	}
+	@media (max-width: 600px) {
+		.logo span { display: none; }
+		.steps { grid-template-columns: 1fr; }
+		.step { border-right: none; border-bottom: 1px solid var(--gray-200); }
+		.step:last-child { border-bottom: none; }
+		.why-grid { grid-template-columns: 1fr; }
+		.why-item { border-right: none !important; }
+		.hero-right { grid-template-columns: 1fr; }
+	}
+</style>
+</head>
+<body>
+
+<header>
+	<div class="container">
+		<div class="header-inner">
+			<a href="/" class="logo">
+				<div class="logo-mark">PF</div>
+				<span>PromptForge</span>
+			</a>
+			<nav>
+				<a href="#overview">Overview</a>
+				<a href="#features">Sections</a>
+				<a href="#setup">Setup</a>
+				<a href="#flow">Flow</a>
+				<a href="/prompts/" class="nav-cta">Live prompts →</a>
+			</nav>
+		</div>
+	</div>
+</header>
+
+<section class="hero" id="overview">
+	<div class="hero-left" data-fade>
+		<div>
+			<div class="hero-tag">Documentation center</div>
+			<h1>PromptForge<br><em>project docs</em><br>in one page.</h1>
+			<p class="hero-sub">This page matches your home UI style and documents your Django app architecture, setup, routes, and next roadmap so anyone can onboard fast.</p>
+			<div class="hero-actions">
+				<a href="#setup" class="btn btn-black">Start setup</a>
+				<a href="#flow" class="btn btn-outline">See data flow</a>
+			</div>
+		</div>
+		<div class="hero-bg-num">01</div>
+	</div>
+	<div class="hero-right" data-fade>
+		<div class="hero-stat">
+			<div class="stat-val">Django</div>
+			<div class="stat-label">Template-rendered pages with app-level routing in core.</div>
+		</div>
+		<div class="hero-stat">
+			<div class="stat-val">Polars CSV</div>
+			<div class="stat-label">Prompt catalog loaded from Dataset.</div>
+		</div>
+	</div>
+</section>
+
+<div class="ticker" aria-hidden="true">
+	<div class="ticker-inner" id="ticker">
+		<span class="ticker-item">PromptForge docs</span>
+		<span class="ticker-item">Local setup</span>
+		<span class="ticker-item">Routes map</span>
+		<span class="ticker-item">Data pipeline</span>
+		<span class="ticker-item">Roadmap notes</span>
+		<span class="ticker-item">PromptForge docs</span>
+		<span class="ticker-item">Local setup</span>
+		<span class="ticker-item">Routes map</span>
+		<span class="ticker-item">Data pipeline</span>
+		<span class="ticker-item">Roadmap notes</span>
+	</div>
+</div>
+
+<section class="section" id="features">
+	<div class="container">
+		<div class="section-header">
+			<div>
+				<div class="section-label">Documentation blocks</div>
+				<h2 class="section-title">What this page <em>covers</em></h2>
+			</div>
+			<div class="section-num">01 / 04</div>
+		</div>
+		<div class="features-grid" data-fade>
+			<div class="feat">
+				<div class="feat-num">01 — structure</div>
+				<h3>Project map</h3>
+				<p>Clear breakdown of Promt, core, account, templates, and Dataset so contributors know where features belong.</p>
+			</div>
+			<div class="feat">
+				<div class="feat-num">02 — setup</div>
+				<h3>Local run guide</h3>
+				<p>Simple commands to create a virtualenv, install dependencies, run migrations, and start the server.</p>
+			</div>
+			<div class="feat">
+				<div class="feat-num">03 — routes</div>
+				<h3>Endpoint reference</h3>
+				<p>Quick list of active routes including home, prompt list, docs page, and Django admin.</p>
+			</div>
+			<div class="feat">
+				<div class="feat-num">04 — roadmap</div>
+				<h3>Next improvements</h3>
+				<p>Recommended upgrade path for auth, database models, detail pages, and test coverage.</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="section" id="setup">
+	<div class="container">
+		<div class="section-header">
+			<div>
+				<div class="section-label">Setup steps</div>
+				<h2 class="section-title">Run locally in <em>4 steps</em></h2>
+			</div>
+			<div class="section-num">02 / 04</div>
+		</div>
+		<div class="steps" data-fade>
+			<div class="step">
+				<div class="step-num-big">1</div>
+				<h4>Create environment</h4>
+				<p>Use Python virtual environment for isolated dependencies.</p>
+			</div>
+			<div class="step">
+				<div class="step-num-big">2</div>
+				<h4>Install requirements</h4>
+				<p>Install project dependencies from requirements.txt.</p>
+			</div>
+			<div class="step">
+				<div class="step-num-big">3</div>
+				<h4>Migrate database</h4>
+				<p>Run migrations before opening pages that depend on Django models.</p>
+			</div>
+			<div class="step">
+				<div class="step-num-big">4</div>
+				<h4>Start server</h4>
+				<p>Launch the app with runserver and open home, prompts, and docs pages.</p>
+			</div>
+		</div>
+		<div class="doc-shell" data-fade>
+			<div class="doc-bar">
+				<div class="doc-tab">Terminal commands</div>
+			</div>
+			<div class="doc-body">
+				<div class="doc-pane">
+					<div class="doc-label">Command sequence</div>
+					<div class="doc-code">python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver</div>
+				</div>
+				<div class="doc-pane">
+					<div class="doc-label">Environment notes</div>
+					<ul class="doc-list">
+						<li>Set SECRET_KEY in .env</li>
+						<li>Set DEBUG=True for local use</li>
+						<li>Set ALLOWED_HOSTS for deployment</li>
+						<li>WhiteNoise handles static files in production</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="section" id="flow">
+	<div class="container">
+		<div class="section-header">
+			<div>
+				<div class="section-label">Flow + routes</div>
+				<h2 class="section-title">How requests <em>move</em></h2>
+			</div>
+			<div class="section-num">03 / 04</div>
+		</div>
+		<div class="why-grid" data-fade>
+			<div class="why-item">
+				<span class="why-icon">/</span>
+				<h4>Home route</h4>
+				<p>Path / renders home.html through the Home view in core/views.py.</p>
+			</div>
+			<div class="why-item">
+				<span class="why-icon">/prompts</span>
+				<h4>Prompt listing</h4>
+				<p>Reads prompts_production_ready.csv with Polars and filters by domain query parameter.</p>
+			</div>
+			<div class="why-item">
+				<span class="why-icon">/docs</span>
+				<h4>Documentation page</h4>
+				<p>This route serves templates/docs/docs.html as the project handbook page.</p>
+			</div>
+			<div class="why-item">
+				<span class="why-icon">/admin</span>
+				<h4>Django admin</h4>
+				<p>Standard admin interface for management tasks and future model administration.</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="cta-section">
+	<h2>Keep this project<br><em>well documented.</em></h2>
+	<p>Update docs when routes, datasets, or architecture changes.</p>
+	<a href="/prompts/" class="btn btn-black" style="font-size:1rem; padding:16px 36px; position:relative; z-index:1;">Open prompt library →</a>
+</section>
+
+<footer>
+	<div class="container" style="display:flex; align-items:stretch; justify-content:space-between; width:100%;">
+		<div class="footer-brand">
+			<div class="logo-mark">PM</div>
+			PromptForge Docs
+		</div>
+		<div style="display:flex; align-items:stretch;">
+			<div class="footer-links">
+				<a href="/">Home</a>
+				<a href="/prompts/">Prompts</a>
+				<a href="/docs/">Docs</a>
+			</div>
+			<div class="footer-copy">© 2026</div>
+		</div>
+	</div>
+</footer>
+
+<script>
+	var faders = document.querySelectorAll('[data-fade]');
+	var observer = new IntersectionObserver(function(entries) {
+		entries.forEach(function(entry) {
+			if (entry.isIntersecting) {
+				entry.target.classList.add('visible');
+				observer.unobserve(entry.target);
+			}
+		});
+	}, { threshold: 0.1 });
+	faders.forEach(function(el) { observer.observe(el); });
+
+	var ticker = document.getElementById('ticker');
+	ticker.innerHTML += ticker.innerHTML;
+</script>
+</body>
+</html>

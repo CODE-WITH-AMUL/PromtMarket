@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}PromptMarket - Login{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/login.css' %}">
+{% endblock %}
+{% block footer %}{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Account access</div>
+    <h1>Welcome back.<br>Continue with<br><em>PromptMarket</em>.</h1>
+    <p>Sign in to access your account and continue managing production-ready prompts.</p>
+    <div class="hero-bg-num">03</div>
+  </div>
+
+  <div class="hero-right">
+    <div class="auth-card">
+      <div class="card-top">
+        <h2>Login</h2>
+        <span>secure</span>
+      </div>
+      <form method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        {% if messages %}
+          {% for message in messages %}
+            <div class="flash">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" type="email" name="email" required>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" type="password" name="password" required>
+        </div>
+        <button type="submit" class="btn">Login</button>
+        <p class="helper">No account yet? <a href="{% url 'register' %}">Register here</a></p>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block extra_js %}{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}PromptMarket - Register{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/register.css' %}">
+{% endblock %}
+{% block footer %}{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-tag">Create account</div>
+    <h1>Join PromptMarket.<br>Build and share<br><em>better prompts</em>.</h1>
+    <p>Create your account to save your workflow and access your prompt space.</p>
+    <div class="hero-bg-num">04</div>
+  </div>
+
+  <div class="hero-right">
+    <div class="auth-card">
+      <div class="card-top">
+        <h2>Register</h2>
+        <span>new user</span>
+      </div>
+      <form method="post" action="{% url 'register' %}">
+        {% csrf_token %}
+        {% if messages %}
+          {% for message in messages %}
+            <div class="flash">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" type="email" name="email" required>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" type="password" name="password" required>
+        </div>
+        <div class="field">
+          <label for="confirm_password">Confirm Password</label>
+          <input id="confirm_password" type="password" name="confirm_password" required>
+        </div>
+        <button type="submit" class="btn">Create account</button>
+        <p class="helper">Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block extra_js %}{% endblock %}

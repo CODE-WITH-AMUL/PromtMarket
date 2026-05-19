@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PromptMarket - Prompt Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+        --black: #0a0a0a;
+        --white: #fafafa;
+        --gray-100: #f2f2f2;
+        --gray-200: #e0e0e0;
+        --gray-400: #aaaaaa;
+        --gray-600: #666666;
+        --serif: 'DM Serif Display', serif;
+        --sans: 'Instrument Sans', sans-serif;
+        --mono: 'DM Mono', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+        background: var(--white);
+        color: var(--black);
+        font-family: var(--sans);
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+    }
+
+    body::before {
+        content: '';
+        position: fixed; inset: 0;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+        pointer-events: none; z-index: 9999; opacity: .5;
+    }
+
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 2rem; }
+
+    header {
+        position: sticky; top: 0; z-index: 100;
+        background: var(--white);
+        border-bottom: 1px solid var(--black);
+    }
+    .header-inner {
+        display: flex; align-items: stretch; justify-content: space-between;
+        height: 56px;
+    }
+    .logo {
+        display: flex; align-items: center; gap: 10px;
+        font-family: var(--serif); font-size: 1.25rem;
+        border-right: 1px solid var(--black); padding: 0 1.5rem;
+        text-decoration: none; color: var(--black);
+    }
+    .logo-mark {
+        width: 28px; height: 28px; background: var(--black);
+        display: flex; align-items: center; justify-content: center;
+        font-family: var(--mono); font-size: .75rem; color: var(--white);
+        font-weight: 500;
+    }
+    nav { display: flex; align-items: stretch; }
+    nav a {
+        display: flex; align-items: center;
+        padding: 0 1.25rem;
+        font-size: .8rem; font-weight: 500; letter-spacing: .05em; text-transform: uppercase;
+        color: var(--gray-600); text-decoration: none;
+        border-left: 1px solid var(--gray-200);
+        transition: background .15s, color .15s;
+    }
+    nav a:hover { background: var(--gray-100); color: var(--black); }
+    .nav-cta {
+        background: var(--black); color: var(--white);
+        border-left: 1px solid var(--black);
+    }
+
+    .hero {
+        border-bottom: 1px solid var(--black);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: 380px;
+    }
+    .hero-left {
+        border-right: 1px solid var(--black);
+        padding: 3.2rem 3rem;
+        display: flex; flex-direction: column; justify-content: space-between;
+        position: relative; overflow: hidden;
+    }
+    .hero-tag {
+        display: inline-flex; align-items: center; gap: 8px;
+        font-family: var(--mono); font-size: .72rem; letter-spacing: .1em;
+        text-transform: uppercase; color: var(--gray-600);
+        margin-bottom: 1.8rem;
+    }
+    .hero-tag::before {
+        content: ''; width: 8px; height: 8px;
+        background: var(--black); border-radius: 50%;
+    }
+    h1 {
+        font-family: var(--serif);
+        font-size: clamp(2.3rem, 4vw, 3.5rem);
+        line-height: 1.05;
+        margin-bottom: 1rem;
+    }
+    .hero-sub {
+        color: var(--gray-600);
+        line-height: 1.7;
+        max-width: 520px;
+        margin-bottom: 1.6rem;
+    }
+    .hero-bg-num {
+        position: absolute; bottom: -.8rem; right: -.2rem;
+        font-family: var(--serif); font-size: 10rem;
+        color: var(--gray-200); pointer-events: none;
+    }
+    .hero-right {
+        display: grid;
+        grid-template-rows: 1fr 1fr;
+    }
+    .hero-stat {
+        padding: 2rem;
+        border-bottom: 1px solid var(--black);
+        display: flex; flex-direction: column; justify-content: center;
+    }
+    .hero-stat:last-child { border-bottom: none; }
+    .stat-val {
+        font-family: var(--serif);
+        font-size: 2.4rem;
+        margin-bottom: .35rem;
+    }
+    .stat-label { color: var(--gray-600); font-size: .85rem; }
+
+    .section {
+        border-bottom: 1px solid var(--black);
+        padding: 2.3rem 0;
+    }
+    .section-header {
+        display: flex; justify-content: space-between; align-items: baseline;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--gray-200);
+        margin-bottom: 1.25rem;
+    }
+    .section-label {
+        font-family: var(--mono);
+        font-size: .72rem;
+        text-transform: uppercase;
+        letter-spacing: .1em;
+        color: var(--gray-400);
+    }
+    .section-title {
+        font-family: var(--serif);
+        font-size: clamp(1.8rem, 3vw, 2.4rem);
+    }
+    .section-num {
+        font-family: var(--serif);
+        font-size: 1rem;
+        color: var(--gray-200);
+    }
+
+    .filter-wrap {
+        display: flex;
+        gap: .6rem;
+        flex-wrap: wrap;
+    }
+    .tag {
+        font-family: var(--mono);
+        font-size: .74rem;
+        letter-spacing: .05em;
+        text-transform: uppercase;
+        text-decoration: none;
+        color: var(--gray-600);
+        border: 1px solid var(--gray-200);
+        padding: .55rem .82rem;
+        transition: all .15s;
+    }
+    .tag:hover { background: var(--gray-100); color: var(--black); }
+    .tag.active {
+        background: var(--black);
+        color: var(--white);
+        border-color: var(--black);
+    }
+
+    .table-shell {
+        border: 1px solid var(--black);
+        overflow-x: auto;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 920px;
+        background: var(--white);
+    }
+    th, td {
+        text-align: left;
+        padding: 1rem .95rem;
+        border-bottom: 1px solid var(--gray-200);
+        border-right: 1px solid var(--gray-200);
+        vertical-align: top;
+    }
+    th:last-child, td:last-child { border-right: none; }
+    tr:last-child td { border-bottom: none; }
+    th {
+        font-family: var(--mono);
+        font-size: .72rem;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        color: var(--gray-600);
+        background: var(--gray-100);
+    }
+    td {
+        font-size: .9rem;
+        color: #2f2f2f;
+    }
+    .prompt {
+        max-width: 540px;
+        line-height: 1.68;
+        white-space: pre-wrap;
+    }
+
+    .empty {
+        padding: 1.4rem;
+        text-align: center;
+        color: var(--gray-600);
+        font-size: .95rem;
+    }
+
+        .pagination {
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            font-family: var(--mono);
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+        }
+
+        .pagination a {
+            color: var(--black);
+            text-decoration: none;
+            border: 1px solid var(--gray-200);
+            padding: .4rem .6rem;
+        }
+
+    footer {
+        border-top: 1px solid var(--black);
+        display: flex; align-items: stretch; justify-content: space-between;
+    }
+    .footer-brand {
+        display: flex; align-items: center; gap: 10px;
+        font-family: var(--serif); font-size: 1rem;
+        padding: 1.25rem 1.5rem; border-right: 1px solid var(--gray-200);
+    }
+    .footer-links { display: flex; align-items: stretch; }
+    .footer-links a {
+        display: flex; align-items: center;
+        padding: 0 1.25rem; font-size: .78rem; font-weight: 500;
+        letter-spacing: .05em; text-transform: uppercase;
+        color: var(--gray-600); text-decoration: none;
+        border-left: 1px solid var(--gray-200);
+        transition: background .15s, color .15s;
+    }
+    .footer-links a:hover { background: var(--gray-100); color: var(--black); }
+    .footer-copy {
+        display: flex; align-items: center;
+        padding: 0 1.5rem; border-left: 1px solid var(--gray-200);
+        font-family: var(--mono); font-size: .72rem; color: var(--gray-400);
+    }
+
+    @media (max-width: 900px) {
+        .hero { grid-template-columns: 1fr; }
+        .hero-left { border-right: none; border-bottom: 1px solid var(--black); }
+        .hero-right { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+        nav a:not(.nav-cta) { display: none; }
+    }
+    @media (max-width: 600px) {
+        .logo span { display: none; }
+        .hero-right { grid-template-columns: 1fr; }
+        .hero-bg-num { font-size: 8rem; }
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <div class="header-inner">
+            <a href="/" class="logo">
+                <div class="logo-mark">PM</div>
+                <span>PromptMarket</span>
+            </a>
+            <nav>
+                <a href="/">Home</a>
+                <a href="/prompts/">Prompts</a>
+                <a href="/docs/">Docs</a>
+                <a href="/admin/">Admin</a>
+                <a href="/docs/" class="nav-cta">Project docs →</a>
+            </nav>
+        </div>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="hero-left">
+        <div>
+            <div class="hero-tag">Prompt catalog explorer</div>
+            <h1>Browse and filter<br><em>production-ready</em><br>AI prompts.</h1>
+            <p class="hero-sub">Discover prompt records by domain and inspect text, language, and difficulty in a unified dataset view.</p>
+        </div>
+        <div class="hero-bg-num">02</div>
+    </div>
+    <div class="hero-right">
+        <div class="hero-stat">
+            <div class="stat-val">{{ data|length }}</div>
+            <div class="stat-label">Rows shown in current filter</div>
+        </div>
+        <div class="hero-stat">
+            <div class="stat-val">{{ domains|length }}</div>
+            <div class="stat-label">Available domains in dataset</div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <div>
+                <div class="section-label">Domain filters</div>
+                <h2 class="section-title">Choose a domain</h2>
+            </div>
+            <div class="section-num">01 / 02</div>
+        </div>
+        <div class="filter-wrap">
+            <a href="/prompts/" class="tag {% if not selected_domain %}active{% endif %}">all</a>
+            {% for d in domains %}
+            <a href="?domain={{ d }}" class="tag {% if d == selected_domain %}active{% endif %}">{{ d }}</a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <div>
+                <div class="section-label">Dataset table</div>
+                <h2 class="section-title">Prompt library</h2>
+            </div>
+            <div class="section-num">02 / 02</div>
+        </div>
+
+        <div class="table-shell">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Prompt</th>
+                        <th>Language</th>
+                        <th>Domain</th>
+                        <th>Difficulty</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in data %}
+                    <tr>
+                        <td>{{ row.prompt_id }}</td>
+                        <td class="prompt">{{ row.prompt_text }}</td>
+                        <td>{{ row.language }}</td>
+                        <td>{{ row.domain }}</td>
+                        <td>{{ row.difficulty }}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="empty">No prompts found for this filter.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if selected_domain %}&domain={{ selected_domain }}{% endif %}">Previous</a>
+            {% endif %}
+            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if selected_domain %}&domain={{ selected_domain }}{% endif %}">Next</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container" style="display:flex; align-items:stretch; justify-content:space-between; width:100%;">
+        <div class="footer-brand">
+            <div class="logo-mark">PM</div>
+            PromptMarket
+        </div>
+        <div style="display:flex; align-items:stretch;">
+            <div class="footer-links">
+                <a href="/">Home</a>
+                <a href="/prompts/">Prompts</a>
+                <a href="/docs/">Docs</a>
+            </div>
+            <div class="footer-copy">© 2026</div>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

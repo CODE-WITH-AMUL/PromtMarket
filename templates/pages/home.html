@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}PromptForge — AI Prompt Enhancement Engine{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/home.css' %}">
+{% endblock %}
+{% block content %}
+<!-- HEADER -->
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left" data-fade>
+    <div>
+      <div class="hero-tag">Public beta — no card required</div>
+      <h1>From rough prompt<br>to <em>production-grade</em><br>output.</h1>
+      <p class="hero-sub">PromptForge instantly enhances your AI instructions, cleans messy datasets, and generates robust, deployable code — all within a unified workflow engine.</p>
+      <div class="hero-actions">
+        <a href="{% url 'login' %}" class="btn btn-black">Try PromptForge Free</a>
+        <a href="#demo" class="btn btn-outline">Watch Demo</a>
+      </div>
+    </div>
+    <div class="hero-bg-num">01</div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-stat" data-fade>
+      <div class="stat-val">10×</div>
+      <div class="stat-label">Faster prompt iteration vs manual rewrites</div>
+    </div>
+    <div class="hero-stat" data-fade>
+      <div class="stat-val">98%</div>
+      <div class="stat-label">Output consistency with structured enhancement</div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-inner" id="ticker">
+    <span class="ticker-item">AI Prompt Enhancement</span>
+    <span class="ticker-item">Production-Grade Code</span>
+    <span class="ticker-item">Dataset Cleaning</span>
+    <span class="ticker-item">Workflow Automation</span>
+    <span class="ticker-item">GPT-4 Compatible</span>
+    <span class="ticker-item">Claude Compatible</span>
+    <span class="ticker-item">Open Source Models</span>
+    <span class="ticker-item">CSV &amp; JSON Support</span>
+    <span class="ticker-item">GitHub Integration</span>
+    <span class="ticker-item">VS Code Extension</span>
+    <span class="ticker-item">AI Prompt Enhancement</span>
+    <span class="ticker-item">Production-Grade Code</span>
+    <span class="ticker-item">Dataset Cleaning</span>
+    <span class="ticker-item">Workflow Automation</span>
+    <span class="ticker-item">GPT-4 Compatible</span>
+    <span class="ticker-item">Claude Compatible</span>
+    <span class="ticker-item">Open Source Models</span>
+    <span class="ticker-item">CSV &amp; JSON Support</span>
+    <span class="ticker-item">GitHub Integration</span>
+    <span class="ticker-item">VS Code Extension</span>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-label">Features</div>
+        <h2 class="section-title">Engineered for <em>precision</em></h2>
+      </div>
+      <div class="section-num">01 / 04</div>
+    </div>
+    <div class="features-grid" data-fade>
+      <div class="feat">
+        <div class="feat-num">01 — Enhancement</div>
+        <h3>AI Prompt Enhancement</h3>
+        <p>Automatically refines ambiguous prompts into structured, context-rich instructions that GPT-4, Claude, and open-source models understand perfectly. No guesswork.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-num">02 — Generation</div>
+        <h3>Production-Grade Code</h3>
+        <p>Transforms pseudo-code or natural language descriptions into clean, documented, scalable code following best practices for React, Python, and Node.js.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-num">03 — Cleaning</div>
+        <h3>Dataset Cleaning Support</h3>
+        <p>Detect duplicates, fix formatting inconsistencies, and normalize CSV/JSON datasets before they poison your fine-tuning or analytics pipelines.</p>
+      </div>
+      <div class="feat">
+        <div class="feat-num">04 — Automation</div>
+        <h3>Workflow Improvement</h3>
+        <p>Chain multiple enhancement steps, apply templates, and integrate with GitHub or APIs for a seamless CI/CD-friendly AI workflow engine.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-label">Process</div>
+        <h2 class="section-title">How it <em>works</em></h2>
+      </div>
+      <div class="section-num">02 / 04</div>
+    </div>
+    <div class="steps" data-fade>
+      <div class="step">
+        <div class="step-num-big">1</div>
+        <h4>Paste your prompt</h4>
+        <p>Drop your raw AI instruction, code snippet, or dataset sample into the editor.</p>
+      </div>
+      <div class="step">
+        <div class="step-num-big">2</div>
+        <h4>Select enhancement mode</h4>
+        <p>Choose from code generation, prompt optimization, or data cleaning profiles.</p>
+      </div>
+      <div class="step">
+        <div class="step-num-big">3</div>
+        <h4>AI refines &amp; validates</h4>
+        <p>The engine analyzes context, fills gaps, and applies production-ready patterns.</p>
+      </div>
+      <div class="step">
+        <div class="step-num-big">4</div>
+        <h4>Export &amp; integrate</h4>
+        <p>Copy, download, or push directly to your repo or API endpoint seamlessly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO -->
+<section class="section demo-section" id="demo">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-label">Demo</div>
+        <h2 class="section-title">See the <em>transformation</em></h2>
+      </div>
+      <div class="section-num">03 / 04</div>
+    </div>
+    <div class="demo-ui" data-fade>
+      <div class="demo-topbar">
+        <div class="demo-tab active" data-tab="code">Code generation</div>
+        <div class="demo-tab" data-tab="prompt">Prompt enhancement</div>
+        <div class="demo-tab" data-tab="data">Data cleaning</div>
+      </div>
+      <div class="demo-body" id="demo-code">
+        <div class="demo-pane">
+          <div class="demo-pane-label"><span class="label-dot bad"></span> Input — vague</div>
+          <div class="demo-code">"Write a function to get user data
+and show it. Also clean the csv
+i have."</div>
+        </div>
+        <div class="demo-pane">
+          <div class="demo-pane-label"><span class="label-dot good"></span> Output — production-ready</div>
+          <div class="demo-code"><span class="cm">// Async fetch with full error handling</span>
+<span class="kw">async function</span> fetchUserData(userId) {
+  <span class="kw">try</span> {
+    <span class="kw">const</span> res = <span class="kw">await</span> fetch(
+      <span class="str">`/api/users/${userId}`</span>
+    );
+    <span class="kw">if</span> (!res.ok)
+      <span class="kw">throw new</span> Error(<span class="str">'Network error'</span>);
+    <span class="kw">return await</span> res.json();
+  } <span class="kw">catch</span> (err) {
+    console.error(<span class="str">'Fetch failed'</span>, err);
+    <span class="kw">return null</span>;
+  }
+}
+<span class="cm">// Dataset: remove null rows,
+// normalize date columns.</span></div>
+        </div>
+      </div>
+      <div class="demo-body" id="demo-prompt" style="display:none">
+        <div class="demo-pane">
+          <div class="demo-pane-label"><span class="label-dot bad"></span> Input — vague</div>
+          <div class="demo-code">"Summarize this article for me."</div>
+        </div>
+        <div class="demo-pane">
+          <div class="demo-pane-label"><span class="label-dot good"></span> Output — structured</div>
+          <div class="demo-code"><span class="cm">// Role + format + audience defined</span>
+You are an expert summarizer.
+
+Given the article below, return:
+<span class="kw">1.</span> A 2-sentence executive summary
+<span class="kw">2.</span> 3 key takeaways (bullet list)
+<span class="kw">3.</span> Sentiment: positive / neutral /
+   negative
+
+<span class="kw">Format:</span> Markdown
+<span class="kw">Audience:</span> non-technical stakeholders
+<span class="kw">Tone:</span> concise, professional
+
+<span class="str">[Article text here]</span></div>
+        </div>
+      </div>
+      <div class="demo-body" id="demo-data" style="display:none">
+        <div class="demo-pane">
+          <div class="demo-pane-label"><span class="label-dot bad"></span> Input — messy CSV</div>
+          <div class="demo-code">name,email,date,revenue
+<span class="cm">John,,2023/1/5,1200</span>
+Jane,j@co.com,,890.50
+<span class="cm">John,,2023/1/5,1200</span>
+<span class="cm">,,invalid,</span>
+Bob,b@co.com,2023-02-10,3400</div>
+        </div>
+        <div class="demo-pane">
+          <div class="demo-pane-label"><span class="label-dot good"></span> Output — clean dataset</div>
+          <div class="demo-code"><span class="cm">// Removed 2 duplicates
+// Fixed 1 missing email
+// Normalized 3 date formats
+// Dropped 1 invalid row</span>
+
+name,email,date,revenue
+<span class="kw">Jane</span>,j@co.com,<span class="kw">2023-01-05</span>,890.50
+<span class="kw">Bob</span>,b@co.com,<span class="kw">2023-02-10</span>,3400.00
+<span class="kw">John</span>,<span class="str">john@inferred.com</span>,<span class="kw">2023-01-05</span>,1200.00</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY PROMPTFORGE -->
+<section class="section" id="pricing">
+  <div class="container">
+    <div class="section-header">
+      <div>
+        <div class="section-label">Benefits</div>
+        <h2 class="section-title">Why <em>PromptForge</em>?</h2>
+      </div>
+      <div class="section-num">04 / 04</div>
+    </div>
+    <div class="why-grid" data-fade>
+      <div class="why-item">
+        <span class="why-icon">⟳</span>
+        <h4>10× faster iteration</h4>
+        <p>Stop manually rewriting prompts. Get optimized versions in under 2 seconds, every time.</p>
+      </div>
+      <div class="why-item">
+        <span class="why-icon">◈</span>
+        <h4>Consistent output quality</h4>
+        <p>Eliminate randomness with structured enhancement templates that apply proven patterns.</p>
+      </div>
+      <div class="why-item">
+        <span class="why-icon">⊕</span>
+        <h4>Seamless integrations</h4>
+        <p>Works with OpenAI API, VS Code, GitHub Actions, and your existing data infrastructure.</p>
+      </div>
+      <div class="why-item">
+        <span class="why-icon">⊘</span>
+        <h4>Enterprise-grade privacy</h4>
+        <p>Your prompts and data never leave your secure environment. SOC 2 compliant.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Start forging<br><em>better prompts</em> today.</h2>
+  <p>Free plan. No credit card required. Upgrade anytime.</p>
+  <a href="#" class="btn btn-black" style="font-size:1rem; padding:16px 36px;">Try PromptForge Free →</a>
+</section>
+{% endblock %}
+

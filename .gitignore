@@ -1,98 +1,175 @@
-# =========================
-# Django .gitignore
-# =========================
+# =====================================
+# Django + Python + Docker .gitignore
+# =====================================
 
+# ---------------------
 # Python
+# ---------------------
 __pycache__/
 *.py[cod]
 *$py.class
+*.so
+*.pyo
+*.pyd
 
+# ---------------------
 # Virtual Environment
+# ---------------------
 venv/
 env/
 ENV/
+.venv/
 
-# Django
-*.log
-*.pot
-*.pyc
-db.sqlite3
-*.sqlite3
-media/
-
-# Static Files
-staticfiles/
-
+# ---------------------
 # Environment Variables
+# ---------------------
 .env
 .env.*
+!.env.example
 
-# VS Code
-.vscode/
+# ---------------------
+# Django
+# ---------------------
+*.log
+*.pot
 
-# PyCharm
-.idea/
+# Database
+db.sqlite3
+*.sqlite3
+*.sqlite3-journal
+*.sqlite3-shm
+*.sqlite3-wal
+*.db
 
-# Mac
-.DS_Store
+# Uploaded media
+media/
 
-# Windows
-Thumbs.db
+# Collected static files
+staticfiles/
+static/
 
-# Jupyter Notebook
+# ---------------------
+# Cache
+# ---------------------
+.cache/
+.pytest_cache/
+__pycache__/
+.mypy_cache/
+.ruff_cache/
+.pyre/
+.tox/
+
+# ---------------------
+# Coverage / Testing
+# ---------------------
+.coverage
+.coverage.*
+htmlcov/
+nosetests.xml
+coverage.xml
+
+# ---------------------
+# Jupyter
+# ---------------------
 .ipynb_checkpoints/
 
-# Testing
-.coverage
-htmlcov/
-.pytest_cache/
+# ---------------------
+# VS Code
+# ---------------------
+.vscode/
+*.code-workspace
 
-# Migrations (optional)
-# */migrations/*.py
-# !*/migrations/__init__.py
+# ---------------------
+# PyCharm
+# ---------------------
+.idea/
 
-# Node Modules
+# ---------------------
+# Qodo / AI tools
+# ---------------------
+.qodo/
+
+# ---------------------
+# Mac
+# ---------------------
+.DS_Store
+
+# ---------------------
+# Windows
+# ---------------------
+Thumbs.db
+desktop.ini
+
+# ---------------------
+# Node
+# ---------------------
 node_modules/
 
-# Build Files
+# ---------------------
+# Build files
+# ---------------------
 dist/
 build/
 
-# Temporary Files
+# ---------------------
+# Temporary files
+# ---------------------
 *.tmp
 *.bak
+*.swp
 
+# ---------------------
 # Logs
+# ---------------------
 logs/
 *.log
 
+# ---------------------
 # Gunicorn
+# ---------------------
 gunicorn.pid
 
-# Render
-.render/
-
+# ---------------------
 # Docker
+# ---------------------
 *.pid
 *.seed
 *.pid.lock
+docker-compose.override.yml
 
-# SQLite Database
-db.sqlite3
+# ---------------------
+# Render
+# ---------------------
+.render/
 
-# Cache
-.cache/
+# ---------------------
+# Python version files
+# ---------------------
+.python-version
 
-# MyPy
-.mypy_cache/
+# ---------------------
+# Secret files
+# ---------------------
+secret.json
+credentials.json
 
-# Ruff
-.ruff_cache/
+# ---------------------
+# Celery
+# ---------------------
+celerybeat-schedule
 
-# Pyre
-.pyre/
+# ---------------------
+# Dataset
+# ---------------------
+/Dataset/
+/images/
 
-# Coverage
-.coverage.*
+# ---------------------
+# Ignore generated prompt outputs only
+# ---------------------
+# /Prompt/generated/
 
-/Dataset
+# ---------------------
+# Deployment temp files
+# ---------------------
+# /deploy/temp/

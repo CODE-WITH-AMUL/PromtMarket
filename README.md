@@ -140,6 +140,12 @@ Start the server:
 python manage.py runserver
 ```
 
+Production notes:
+
+- Do NOT store secrets in the repository. Set `SECRET_KEY`, `DATABASE_URL` (if using a server DB), and other sensitive values in your hosting provider's environment variables (e.g., Render, Heroku, etc.).
+- If you continue to use SQLite in production, ensure the container's working directory matches where the DB file is created; this project uses an entrypoint that runs migrations at container start to ensure the SQLite DB is initialized.
+- To run migrations during deploy on Render, set the `ENTRYPOINT` to run `entrypoint.sh` or configure a `release` command to run `python manage.py migrate --noinput`.
+
 ---
 
 Version: V1 Initial Release  

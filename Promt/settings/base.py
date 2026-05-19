@@ -90,8 +90,8 @@ if database_url:
     default_database = env.db("DATABASE_URL")
 else:
     default_database = {
-        "ENGINE": env("DATABASE_ENGINE", default="django.db.backends.sqlite3"),
-        "NAME": BASE_DIR / env("DATABASE_NAME", default="db.sqlite3"),
+        "ENGINE": env("DATABASE_ENGINE"),
+        "NAME": BASE_DIR / env("DATABASE_NAME"),
     }
 
 DATABASES = {"default": default_database}

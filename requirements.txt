@@ -1,21 +1,28 @@
-Django==5.1.3
+# Web framework & server
+Django==5.2.1
 gunicorn==26.0.0
 
-django-cors-headers==4.7.0
+# Django extensions
+django-cors-headers==4.9.0
 django-environ==0.13.0
 django-ratelimit==4.1.0
 
+# Static files
 whitenoise==6.12.0
 
-psycopg==3.2.12
-psycopg-binary==3.2.12
+# PostgreSQL (psycopg 3)
+psycopg==3.3.4
+psycopg-binary==3.3.3
 
+# Security
 argon2-cffi==25.1.0
-cryptography==48.0.0
+cryptography==44.0.3
 
+# Imaging & utilities
 pillow==11.3.0
 python-dateutil==2.9.0.post0
 
+# Data science
 polars==1.40.1
-numpy==1.26.4
-pandas==3.0.3
+numpy==2.2.5
+pandas==3.0.2

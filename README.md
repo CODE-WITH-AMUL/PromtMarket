@@ -1,7 +1,7 @@
 # Prompt Market
 
 <p align="center">
-  <img src="./images/promt.png" width="1000">
+  <img src="/images/promt.png" width="1000">
 </p>
 
 <p align="center">
@@ -83,7 +83,7 @@ The goal of Prompt Market is to create a centralized platform where users can ea
 ## Project Preview
 
 <p align="center">
-    <img src="./images/promt.png" width="900">
+    <img src="/images/promt.png" width="900">
 </p>
 
 ---

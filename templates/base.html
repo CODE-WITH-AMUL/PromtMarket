@@ -2,24 +2,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{% block title %}PromptMarket{% endblock %}</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
-<link rel="stylesheet" href="{% static 'css/components.css' %}">
-<link rel="stylesheet" href="{% static 'css/responsive.css' %}">
-{% block extra_css %}{% endblock %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}PromptMarket{% endblock %}</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/components.css' %}">
+  <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+  
+  <!-- Extra CSS for specific pages -->
+  {% block extra_css %}{% endblock %}
 </head>
+
 <body>
-{% include 'components/navbar.html' %}
-{% block content %}{% endblock %}
-{% block footer %}{% include 'components/footer.html' %}{% endblock %}
-<script src="{% static 'js/main.js' %}"></script>
-<script src="{% static 'js/search.js' %}"></script>
-<script src="{% static 'js/animations.js' %}"></script>
-{% block extra_js %}{% endblock %}
+  <!-- Header / Navigation -->
+  {% include 'components/navbar.html' %}
+  
+  <!-- Main Content -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  
+  <!-- Footer -->
+  {% include 'components/footer.html' %}
+  
+  <!-- JavaScript -->
+  <script src="{% static 'js/main.js' %}"></script>
+  {% block extra_js %}{% endblock %}
 </body>
 </html>

@@ -177,4 +177,6 @@ python manage.py runserver</div>
 	<a href="/prompts/" class="btn btn-black" style="font-size:1rem; padding:16px 36px; position:relative; z-index:1;">Open prompt library →</a>
 </section>
 {% endblock %}
-
+{% block extra_js %}
+<script src="{% static 'js/pages/docs.js' %}"></script>
+{% endblock %}

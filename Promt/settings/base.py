@@ -1,8 +1,8 @@
 from pathlib import Path
 from urllib.parse import urlsplit
-
 import environ
 
+# ---------------- BASE ----------------
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 env = environ.Env(
@@ -16,22 +16,27 @@ env = environ.Env(
 environ.Env.read_env(str(BASE_DIR / ".env"))
 
 SECRET_KEY = env("SECRET_KEY")
-DEBUG = env.bool("DEBUG")
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
-CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
-CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])
+DEBUG = env.bool("DEBUG", default=False)
 
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
 
+# ---------------- ORIGINS ----------------
 def _normalize_origin(origin: str) -> str:
     parts = urlsplit(origin.strip())
     if not parts.scheme or not parts.netloc:
-        return origin.strip().rstrip('/')
+        return origin.strip().rstrip("/")
     return f"{parts.scheme}://{parts.netloc}"
 
 
-CSRF_TRUSTED_ORIGINS = [_normalize_origin(origin) for origin in CSRF_TRUSTED_ORIGINS if origin.strip()]
-CORS_ALLOWED_ORIGINS = [_normalize_origin(origin) for origin in CORS_ALLOWED_ORIGINS if origin.strip()]
+CSRF_TRUSTED_ORIGINS = [
+    _normalize_origin(o) for o in env.list("CSRF_TRUSTED_ORIGINS", default=[])
+]
 
+CORS_ALLOWED_ORIGINS = [
+    _normalize_origin(o) for o in env.list("CORS_ALLOWED_ORIGINS", default=[])
+]
+
+# ---------------- APPS ----------------
 INSTALLED_APPS = [
     "corsheaders",
     "django.contrib.admin",
@@ -44,9 +49,10 @@ INSTALLED_APPS = [
     "core",
 ]
 
+# ---------------- MIDDLEWARE ----------------
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # MUST be right after SecurityMiddleware
     "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -58,6 +64,10 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "Promt.urls"
 
+WSGI_APPLICATION = "Promt.wsgi.application"
+ASGI_APPLICATION = "Promt.asgi.application"
+
+# ---------------- TEMPLATES ----------------
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -73,22 +83,23 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "Promt.wsgi.application"
-ASGI_APPLICATION = "Promt.asgi.application"
-
+# ---------------- DATABASE ----------------
 database_url = env("DATABASE_URL", default="").strip()
+
 if database_url:
     default_database = env.db("DATABASE_URL")
 else:
     default_database = {
-        "ENGINE": env("DATABASE_ENGINE", default=""),
-        "NAME": BASE_DIR / env("DATABASE_NAME", default=""),
+        "ENGINE": env("DATABASE_ENGINE", default="django.db.backends.sqlite3"),
+        "NAME": BASE_DIR / env("DATABASE_NAME", default="db.sqlite3"),
     }
 
 DATABASES = {"default": default_database}
+
 DATABASES["default"]["CONN_MAX_AGE"] = env.int("DB_CONN_MAX_AGE", default=60)
 DATABASES["default"]["ATOMIC_REQUESTS"] = env.bool("DB_ATOMIC_REQUESTS", default=True)
 
+# ---------------- PASSWORDS ----------------
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
@@ -103,26 +114,34 @@ PASSWORD_HASHERS = [
     "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
 ]
 
+# ---------------- I18N ----------------
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "Asia/Kathmandu"
 USE_I18N = True
 USE_TZ = True
 
+# ---------------- STATIC FILES (FIXED FOR RENDER) ----------------
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+# IMPORTANT: MUST exist in project root
 STATICFILES_DIRS = [BASE_DIR / "static"]
+
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-
+# ---------------- MEDIA ----------------
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+# ---------------- DEFAULT AUTO FIELD ----------------
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+# ---------------- AUTH ----------------
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "prompts"
 LOGOUT_REDIRECT_URL = "login"
 
+# ---------------- SECURITY ----------------
 X_FRAME_OPTIONS = "DENY"
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_REFERRER_POLICY = "same-origin"
@@ -135,10 +154,13 @@ CSRF_COOKIE_SAMESITE = "Lax"
 
 CORS_ALLOW_ALL_ORIGINS = False
 
+# ---------------- UPLOAD LIMITS ----------------
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000
 FILE_UPLOAD_MAX_MEMORY_SIZE = 5 * 1024 * 1024
 
+# ---------------- CACHE ----------------
 CACHE_TTL_SECONDS = env.int("CACHE_TTL_SECONDS", default=300)
+
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
@@ -147,10 +169,12 @@ CACHES = {
     }
 }
 
+# ---------------- ADMINS ----------------
 ADMINS = [
-    ("Platform Admin", env("ADMIN_EMAIL", default="nothing")),
+    ("Platform Admin", env("ADMIN_EMAIL", default="admin@example.com")),
 ]
 
+# ---------------- LOGGING ----------------
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,

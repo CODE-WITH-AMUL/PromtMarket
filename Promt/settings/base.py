@@ -124,10 +124,6 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# IMPORTANT: MUST exist in project root
-STATICFILES_DIRS = [BASE_DIR / "static"]
-
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # ---------------- MEDIA ----------------
 MEDIA_URL = "/media/"

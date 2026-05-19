@@ -162,6 +162,7 @@ celerybeat-schedule
 # Dataset
 # ---------------------
 /Dataset/
+/images/
 
 # ---------------------
 # Ignore generated prompt outputs only

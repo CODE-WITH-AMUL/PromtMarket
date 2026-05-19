@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}PromptForge Docs{% endblock %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/pages/docs.css' %}">
+{% endblock %}
+{% block content %}
+<section class="hero" id="overview">
+	<div class="hero-left" data-fade>
+		<div>
+			<div class="hero-tag">Documentation center</div>
+			<h1>PromptForge<br><em>project docs</em><br>in one page.</h1>
+			<p class="hero-sub">This page matches your home UI style and documents your Django app architecture, setup, routes, and next roadmap so anyone can onboard fast.</p>
+			<div class="hero-actions">
+				<a href="#setup" class="btn btn-black">Start setup</a>
+				<a href="#flow" class="btn btn-outline">See data flow</a>
+			</div>
+		</div>
+		<div class="hero-bg-num">01</div>
+	</div>
+	<div class="hero-right" data-fade>
+		<div class="hero-stat">
+			<div class="stat-val">Django</div>
+			<div class="stat-label">Template-rendered pages with app-level routing in core.</div>
+		</div>
+		<div class="hero-stat">
+			<div class="stat-val">Polars CSV</div>
+			<div class="stat-label">Prompt catalog loaded from Dataset.</div>
+		</div>
+	</div>
+</section>
+
+<div class="ticker" aria-hidden="true">
+	<div class="ticker-inner" id="ticker">
+		<span class="ticker-item">PromptForge docs</span>
+		<span class="ticker-item">Local setup</span>
+		<span class="ticker-item">Routes map</span>
+		<span class="ticker-item">Data pipeline</span>
+		<span class="ticker-item">Roadmap notes</span>
+		<span class="ticker-item">PromptForge docs</span>
+		<span class="ticker-item">Local setup</span>
+		<span class="ticker-item">Routes map</span>
+		<span class="ticker-item">Data pipeline</span>
+		<span class="ticker-item">Roadmap notes</span>
+	</div>
+</div>
+
+<section class="section" id="features">
+	<div class="container">
+		<div class="section-header">
+			<div>
+				<div class="section-label">Documentation blocks</div>
+				<h2 class="section-title">What this page <em>covers</em></h2>
+			</div>
+			<div class="section-num">01 / 04</div>
+		</div>
+		<div class="features-grid" data-fade>
+			<div class="feat">
+				<div class="feat-num">01 — structure</div>
+				<h3>Project map</h3>
+				<p>Clear breakdown of Promt, core, account, templates, and Dataset so contributors know where features belong.</p>
+			</div>
+			<div class="feat">
+				<div class="feat-num">02 — setup</div>
+				<h3>Local run guide</h3>
+				<p>Simple commands to create a virtualenv, install dependencies, run migrations, and start the server.</p>
+			</div>
+			<div class="feat">
+				<div class="feat-num">03 — routes</div>
+				<h3>Endpoint reference</h3>
+				<p>Quick list of active routes including home, prompt list, docs page, and Django admin.</p>
+			</div>
+			<div class="feat">
+				<div class="feat-num">04 — roadmap</div>
+				<h3>Next improvements</h3>
+				<p>Recommended upgrade path for auth, database models, detail pages, and test coverage.</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="section" id="setup">
+	<div class="container">
+		<div class="section-header">
+			<div>
+				<div class="section-label">Setup steps</div>
+				<h2 class="section-title">Run locally in <em>4 steps</em></h2>
+			</div>
+			<div class="section-num">02 / 04</div>
+		</div>
+		<div class="steps" data-fade>
+			<div class="step">
+				<div class="step-num-big">1</div>
+				<h4>Create environment</h4>
+				<p>Use Python virtual environment for isolated dependencies.</p>
+			</div>
+			<div class="step">
+				<div class="step-num-big">2</div>
+				<h4>Install requirements</h4>
+				<p>Install project dependencies from requirements.txt.</p>
+			</div>
+			<div class="step">
+				<div class="step-num-big">3</div>
+				<h4>Migrate database</h4>
+				<p>Run migrations before opening pages that depend on Django models.</p>
+			</div>
+			<div class="step">
+				<div class="step-num-big">4</div>
+				<h4>Start server</h4>
+				<p>Launch the app with runserver and open home, prompts, and docs pages.</p>
+			</div>
+		</div>
+		<div class="doc-shell" data-fade>
+			<div class="doc-bar">
+				<div class="doc-tab">Terminal commands</div>
+			</div>
+			<div class="doc-body">
+				<div class="doc-pane">
+					<div class="doc-label">Command sequence</div>
+					<div class="doc-code">python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver</div>
+				</div>
+				<div class="doc-pane">
+					<div class="doc-label">Environment notes</div>
+					<ul class="doc-list">
+						<li>Set SECRET_KEY in .env</li>
+						<li>Set DEBUG=True for local use</li>
+						<li>Set ALLOWED_HOSTS for deployment</li>
+						<li>WhiteNoise handles static files in production</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="section" id="flow">
+	<div class="container">
+		<div class="section-header">
+			<div>
+				<div class="section-label">Flow + routes</div>
+				<h2 class="section-title">How requests <em>move</em></h2>
+			</div>
+			<div class="section-num">03 / 04</div>
+		</div>
+		<div class="why-grid" data-fade>
+			<div class="why-item">
+				<span class="why-icon">/</span>
+				<h4>Home route</h4>
+				<p>Path / renders home.html through the Home view in core/views.py.</p>
+			</div>
+			<div class="why-item">
+				<span class="why-icon">/prompts</span>
+				<h4>Prompt listing</h4>
+				<p>Reads prompts_production_ready.csv with Polars and filters by domain query parameter.</p>
+			</div>
+			<div class="why-item">
+				<span class="why-icon">/docs</span>
+				<h4>Documentation page</h4>
+				<p>This route serves templates/docs/docs.html as the project handbook page.</p>
+			</div>
+			<div class="why-item">
+				<span class="why-icon">/admin</span>
+				<h4>Django admin</h4>
+				<p>Standard admin interface for management tasks and future model administration.</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="cta-section">
+	<h2>Keep this project<br><em>well documented.</em></h2>
+	<p>Update docs when routes, datasets, or architecture changes.</p>
+	<a href="/prompts/" class="btn btn-black" style="font-size:1rem; padding:16px 36px; position:relative; z-index:1;">Open prompt library →</a>
+</section>
+{% endblock %}
+

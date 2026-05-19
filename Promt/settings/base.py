@@ -84,21 +84,18 @@ TEMPLATES = [
 ]
 
 # ---------------- DATABASE ----------------
-database_url = env("DATABASE_URL", default="").strip()
-
-if database_url:
-    default_database = env.db("DATABASE_URL")
-else:
-    default_database = {
-        "ENGINE": env("DATABASE_ENGINE"),
-        "NAME": BASE_DIR / env("DATABASE_NAME"),
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": env("DATABASE_NAME"),
+        "USER": env("DATABASE_USER"),
+        "PASSWORD": env("DATABASE_PASSWORD"),
+        "HOST": env("DATABASE_HOST"),
+        "PORT": env("DATABASE_PORT"),
+        "CONN_MAX_AGE": env.int("DB_CONN_MAX_AGE"),
+        "ATOMIC_REQUESTS": env.bool("DB_ATOMIC_REQUESTS"),
     }
-
-DATABASES = {"default": default_database}
-
-DATABASES["default"]["CONN_MAX_AGE"] = env.int("DB_CONN_MAX_AGE", default=60)
-DATABASES["default"]["ATOMIC_REQUESTS"] = env.bool("DB_ATOMIC_REQUESTS", default=True)
-
+}
 # ---------------- PASSWORDS ----------------
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},

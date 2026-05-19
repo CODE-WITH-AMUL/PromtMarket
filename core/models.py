@@ -1,5 +1,6 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.utils.text import slugify
 
 
 PRODUCTION_PROMPT_REQUIREMENTS = (
@@ -32,14 +33,24 @@ class TimeStampModel(models.Model):
         abstract = True
 
 class Promt(TimeStampModel):
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, db_index=True)
     description = models.TextField()
     image = models.ImageField(upload_to='prompts/', null=True, blank=True)
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True, db_index=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def clean(self):
+        if self.image and self.image.size > 5 * 1024 * 1024:
+            raise ValidationError({'image': 'Image file must be less than or equal to 5MB.'})
     
     def save(self, *args, **kwargs):
         # Ensure every stored prompt description asks for production-level output.
         self.description = enforce_production_prompt(self.description)
+        if not self.slug and self.title:
+            self.slug = slugify(self.title)
+        self.full_clean()
         super().save(*args, **kwargs)
     
     

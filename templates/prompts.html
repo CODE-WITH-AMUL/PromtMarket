@@ -227,6 +227,24 @@
         font-size: .95rem;
     }
 
+        .pagination {
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            font-family: var(--mono);
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+        }
+
+        .pagination a {
+            color: var(--black);
+            text-decoration: none;
+            border: 1px solid var(--gray-200);
+            padding: .4rem .6rem;
+        }
+
     footer {
         border-top: 1px solid var(--black);
         display: flex; align-items: stretch; justify-content: space-between;
@@ -361,6 +379,15 @@
                     {% endfor %}
                 </tbody>
             </table>
+        </div>
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if selected_domain %}&domain={{ selected_domain }}{% endif %}">Previous</a>
+            {% endif %}
+            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if selected_domain %}&domain={{ selected_domain }}{% endif %}">Next</a>
+            {% endif %}
         </div>
     </div>
 </section>

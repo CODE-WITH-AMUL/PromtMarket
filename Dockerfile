@@ -14,8 +14,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+RUN python manage.py migrate --noinput
 RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
-CMD ["gunicorn", "Promt.wsgi:application", "--config", "gunicorn.conf.py"]
+CMD ["sh", "-c", "python manage.py migrate --noinput && gunicorn Promt.wsgi:application --config gunicorn.conf.py"]

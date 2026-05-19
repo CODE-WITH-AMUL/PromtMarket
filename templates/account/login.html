@@ -1,165 +1,338 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block title %}PromptMarket - Login{% endblock %}
-{% block extra_css %}
-<style>
-  /* ---- LOGIN PAGE STYLES ---- */
-  
-  .hero {
-    border-bottom: 1px solid var(--black);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    min-height: calc(100vh - 56px);
-  }
-  .hero-left {
-    border-right: 1px solid var(--black);
-    padding: 4rem 3rem;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  .hero-tag {
-    display: inline-flex; align-items: center; gap: 8px;
-    font-family: var(--mono); font-size: .72rem; letter-spacing: .1em;
-    text-transform: uppercase; color: var(--gray-600);
-    margin-bottom: 2rem;
-  }
-  .hero-tag::before {
-    content: ''; width: 8px; height: 8px;
-    background: var(--black); border-radius: 50%;
-  }
-  .hero h1 {
-    font-family: var(--serif);
-    font-size: clamp(2.4rem, 4vw, 3.6rem);
-    line-height: 1.06;
-    margin-bottom: 1rem;
-  }
-  .hero p { color: var(--gray-600); max-width: 460px; line-height: 1.7; }
-  .hero-bg-num {
-    position: absolute; right: -.5rem; bottom: -.8rem;
-    font-family: var(--serif); font-size: 12rem;
-    color: var(--gray-200);
-    user-select: none;
-  }
-  .hero-right { display: grid; place-items: center; padding: 2rem; }
-  .auth-card {
-    width: min(460px, 100%);
-    border: 1px solid var(--black);
-    background: var(--white);
-  }
-  .card-top {
-    padding: 1rem 1.2rem;
-    border-bottom: 1px solid var(--black);
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .card-top h2 { font-family: var(--serif); font-size: 1.7rem; }
-  .card-top span {
-    font-family: var(--mono);
-    font-size: .72rem;
-    color: var(--gray-400);
-    text-transform: uppercase;
-    letter-spacing: .08em;
-  }
-  form { padding: 1.2rem; }
-  .field { margin-bottom: .9rem; }
-  .field label {
-    display: block;
-    font-family: var(--mono);
-    font-size: .72rem;
-    text-transform: uppercase;
-    letter-spacing: .08em;
-    color: var(--gray-600);
-    margin-bottom: .45rem;
-  }
-  .field input {
-    width: 100%;
-    border: 1px solid var(--gray-200);
-    padding: .78rem .85rem;
-    font-family: var(--sans);
-    font-size: .93rem;
-    background: var(--white);
-    outline: none;
-  }
-  .field input:focus { border-color: var(--black); }
-  .btn {
-    width: 100%;
-    border: none;
-    background: var(--black);
-    color: var(--white);
-    padding: .86rem 1rem;
-    font-family: var(--sans);
-    font-size: .9rem;
-    font-weight: 600;
-    cursor: pointer;
-  }
-  .btn:hover { background: #2b2b2b; }
-  .helper {
-    margin-top: .9rem;
-    font-size: .88rem;
-    color: var(--gray-600);
-  }
-  .helper a { color: var(--black); }
-  .flash {
-    margin-bottom: .9rem;
-    border: 1px solid var(--gray-200);
-    background: var(--gray-100);
-    padding: .65rem .75rem;
-    font-size: .86rem;
-  }
-  
-  @media (max-width: 900px) {
-    .hero { grid-template-columns: 1fr; }
-    .hero-left { border-right: none; border-bottom: 1px solid var(--black); }
-  }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PromptMarket - Login</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'black': '#0a0a0a',
+                        'white': '#fafafa',
+                        'gray-100': '#f2f2f2',
+                        'gray-200': '#e0e0e0',
+                        'gray-400': '#aaaaaa',
+                        'gray-600': '#666666',
+                    },
+                    fontFamily: {
+                        'serif': ['DM Serif Display', 'serif'],
+                        'sans': ['Instrument Sans', 'sans-serif'],
+                        'mono': ['DM Mono', 'monospace'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* ---- BASE RESET ---- */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-  @media (max-width: 600px) {
-    .hero { min-height: auto; }
-    .hero-left { padding: 2rem 1.5rem; }
-    .hero h1 { font-size: 1.8rem; }
-    .hero-bg-num { font-size: 8rem; }
-    .hero-right { padding: 1.5rem; }
-    .auth-card { width: 100%; }
-  }
-</style>
-{% endblock %}
+        :root {
+            --black: #0a0a0a;
+            --white: #fafafa;
+            --gray-100: #f2f2f2;
+            --gray-200: #e0e0e0;
+            --gray-400: #aaaaaa;
+            --gray-600: #666666;
+            --serif: 'DM Serif Display', serif;
+            --sans: 'Instrument Sans', sans-serif;
+            --mono: 'DM Mono', monospace;
+        }
 
-{% block content %}
-<section class="hero">
-  <div class="hero-left">
-    <div class="hero-tag">Account access</div>
-    <h1>Welcome back.<br>Continue with<br><em>PromptMarket</em>.</h1>
-    <p>Sign in to access your account and continue managing production-ready prompts.</p>
-    <div class="hero-bg-num">03</div>
-  </div>
+        html { scroll-behavior: smooth; }
 
-  <div class="hero-right">
-    <div class="auth-card">
-      <div class="card-top">
-        <h2>Login</h2>
-        <span>secure</span>
-      </div>
-      <form method="post" action="{% url 'login' %}">
-        {% csrf_token %}
-        {% if messages %}
-          {% for message in messages %}
-            <div class="flash">{{ message }}</div>
-          {% endfor %}
-        {% endif %}
-        <div class="field">
-          <label for="email">Email</label>
-          <input id="email" type="email" name="email" required>
+        body {
+            background: var(--white);
+            color: var(--black);
+            font-family: var(--sans);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* ---- NOISE OVERLAY ---- */
+        body::before {
+            content: '';
+            position: fixed; 
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+            pointer-events: none; 
+            z-index: 9999; 
+            opacity: .5;
+        }
+
+        /* ---- LOGIN PAGE STYLES ---- */
+        
+        .hero {
+            border-bottom: 1px solid var(--black);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: calc(100vh - 56px);
+        }
+        .hero-left {
+            border-right: 1px solid var(--black);
+            padding: 4rem 3rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .hero-tag {
+            display: inline-flex; 
+            align-items: center; 
+            gap: 8px;
+            font-family: var(--mono); 
+            font-size: .72rem; 
+            letter-spacing: .1em;
+            text-transform: uppercase; 
+            color: var(--gray-600);
+            margin-bottom: 2rem;
+        }
+        .hero-tag::before {
+            content: ''; 
+            width: 8px; 
+            height: 8px;
+            background: var(--black); 
+            border-radius: 50%;
+        }
+        .hero h1 {
+            font-family: var(--serif);
+            font-size: clamp(2.4rem, 4vw, 3.6rem);
+            line-height: 1.06;
+            margin-bottom: 1rem;
+        }
+        .hero h1 em { font-style: italic; }
+        .hero p { 
+            color: var(--gray-600); 
+            max-width: 460px; 
+            line-height: 1.7; 
+        }
+        .hero-bg-num {
+            position: absolute; 
+            right: -.5rem; 
+            bottom: -.8rem;
+            font-family: var(--serif); 
+            font-size: 12rem;
+            color: var(--gray-200);
+            user-select: none;
+            pointer-events: none;
+        }
+        .hero-right { 
+            display: grid; 
+            place-items: center; 
+            padding: 2rem; 
+        }
+        .auth-card {
+            width: min(460px, 100%);
+            border: 1px solid var(--black);
+            background: var(--white);
+        }
+        .card-top {
+            padding: 1rem 1.2rem;
+            border-bottom: 1px solid var(--black);
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+        }
+        .card-top h2 { 
+            font-family: var(--serif); 
+            font-size: 1.7rem; 
+        }
+        .card-top span {
+            font-family: var(--mono);
+            font-size: .72rem;
+            color: var(--gray-400);
+            text-transform: uppercase;
+            letter-spacing: .08em;
+        }
+        form { padding: 1.2rem; }
+        .field { margin-bottom: .9rem; }
+        .field label {
+            display: block;
+            font-family: var(--mono);
+            font-size: .72rem;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: var(--gray-600);
+            margin-bottom: .45rem;
+        }
+        .field input {
+            width: 100%;
+            border: 1px solid var(--gray-200);
+            padding: .78rem .85rem;
+            font-family: var(--sans);
+            font-size: .93rem;
+            background: var(--white);
+            outline: none;
+            transition: border-color .15s;
+        }
+        .field input:focus { border-color: var(--black); }
+        .btn {
+            width: 100%;
+            border: none;
+            background: var(--black);
+            color: var(--white);
+            padding: .86rem 1rem;
+            font-family: var(--sans);
+            font-size: .9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .15s;
+        }
+        .btn:hover { background: #2b2b2b; }
+        .helper {
+            margin-top: .9rem;
+            font-size: .88rem;
+            color: var(--gray-600);
+        }
+        .helper a { 
+            color: var(--black); 
+            text-decoration: underline;
+        }
+        .flash {
+            margin-bottom: .9rem;
+            border: 1px solid var(--gray-200);
+            background: var(--gray-100);
+            padding: .65rem .75rem;
+            font-size: .86rem;
+            color: var(--gray-600);
+        }
+
+        /* Navigation styles */
+        nav a {
+            display: flex;
+            align-items: center;
+            padding: 0 1.25rem;
+            font-size: .8rem;
+            font-weight: 500;
+            letter-spacing: .05em;
+            text-transform: uppercase;
+            color: var(--gray-600);
+            text-decoration: none;
+            border-left: 1px solid var(--gray-200);
+            transition: background .15s, color .15s;
+        }
+        nav a:hover { background: var(--gray-100); color: var(--black); }
+        
+        .nav-cta {
+            background: var(--black) !important; 
+            color: var(--white) !important;
+            border-left: 1px solid var(--black) !important;
+            font-weight: 600 !important;
+            transition: opacity .15s !important;
+        }
+        .nav-cta:hover { 
+            opacity: .85 !important; 
+            background: var(--black) !important; 
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 900px) {
+            .hero { grid-template-columns: 1fr; }
+            .hero-left { 
+                border-right: none; 
+                border-bottom: 1px solid var(--black); 
+            }
+            nav a:not(.nav-cta) { display: none; }
+        }
+
+        @media (max-width: 600px) {
+            .hero { min-height: auto; }
+            .hero-left { padding: 2rem 1.5rem; }
+            .hero h1 { font-size: 1.8rem; }
+            .hero-bg-num { font-size: 8rem; }
+            .hero-right { padding: 1.5rem; }
+            .auth-card { width: 100%; }
+            .logo span { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="sticky top-0 z-[100] bg-white border-b border-black p-0">
+        <div class="max-w-[1160px] mx-auto px-0">
+            <div class="flex items-stretch justify-between h-14">
+                <a href="/" class="flex items-center gap-2.5 font-serif text-xl border-r border-black px-4 md:px-6 no-underline text-black tracking-tight">
+                    <div class="w-7 h-7 bg-black flex items-center justify-center font-mono text-xs text-white font-medium">PM</div>
+                    <span>PromptMarket</span>
+                </a>
+                <nav class="flex items-stretch">
+                    <a href="/">Home</a>
+                    <a href="/prompts/">Prompts</a>
+                    <a href="/docs/">Docs</a>
+                    <a href="/register/" class="nav-cta">Register</a>
+                </nav>
+            </div>
         </div>
-        <div class="field">
-          <label for="password">Password</label>
-          <input id="password" type="password" name="password" required>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main>
+        <section class="hero">
+            <div class="hero-left">
+                <div class="hero-tag">Account access</div>
+                <h1>Welcome back.<br>Continue with<br><em>PromptMarket</em>.</h1>
+                <p>Sign in to access your account and continue managing production-ready prompts.</p>
+                <div class="hero-bg-num">03</div>
+            </div>
+
+            <div class="hero-right">
+                <div class="auth-card">
+                    <div class="card-top">
+                        <h2>Login</h2>
+                        <span>secure</span>
+                    </div>
+                    <form method="post" action="{% url 'login' %}">
+                        {% csrf_token %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="flash">{{ message }}</div>
+                            {% endfor %}
+                        {% endif %}
+                        <div class="field">
+                            <label for="email">Email</label>
+                            <input id="email" type="email" name="email" required>
+                        </div>
+                        <div class="field">
+                            <label for="password">Password</label>
+                            <input id="password" type="password" name="password" required>
+                        </div>
+                        <button type="submit" class="btn">Login</button>
+                        <p class="helper">No account yet? <a href="{% url 'register' %}">Register here</a></p>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-black">
+        <div class="max-w-[1160px] mx-auto px-0 flex items-stretch justify-between w-full">
+            <div class="flex items-center gap-2.5 font-serif text-base py-5 px-4 md:px-6 border-r border-gray-200">
+                <div class="w-7 h-7 bg-black flex items-center justify-center font-mono text-xs text-white font-medium">PM</div>
+                <span class="hidden sm:inline">PromptMarket</span>
+            </div>
+            <div class="flex items-stretch">
+                <div class="flex items-stretch">
+                    <a href="/" class="flex items-center px-3 md:px-5 text-xs md:text-sm font-medium tracking-wider uppercase text-gray-600 no-underline border-l border-gray-200 hover:bg-gray-100 hover:text-black transition">Home</a>
+                    <a href="/prompts/" class="flex items-center px-3 md:px-5 text-xs md:text-sm font-medium tracking-wider uppercase text-gray-600 no-underline border-l border-gray-200 hover:bg-gray-100 hover:text-black transition">Prompts</a>
+                    <a href="/docs/" class="flex items-center px-3 md:px-5 text-xs md:text-sm font-medium tracking-wider uppercase text-gray-600 no-underline border-l border-gray-200 hover:bg-gray-100 hover:text-black transition">Docs</a>
+                </div>
+                <div class="hidden md:flex items-center px-4 md:px-6 border-l border-gray-200 font-mono text-xs text-gray-400 tracking-wider">
+                    © 2026 PromptForge. Amul Sharma
+                </div>
+            </div>
         </div>
-        <button type="submit" class="btn">Login</button>
-        <p class="helper">No account yet? <a href="{% url 'register' %}">Register here</a></p>
-      </form>
-    </div>
-  </div>
-</section>
-{% endblock %}
-{% block extra_js %}
-{% endblock %}
+    </footer>
+</body>
+</html>

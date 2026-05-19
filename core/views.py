@@ -13,12 +13,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 def home_view(request):
-    template_name = 'pages/home.html'
+    template_name = 'home.html'
     return render(request, template_name)
 
 
 def docs_page(request):
-    return render(request, 'pages/prompt_detail.html')
+    return render(request, 'docs/docs.html')
 
 
 def health_check(request):
@@ -44,7 +44,7 @@ def show_prompts(request):
         if isinstance(prompt_text, str):
             row["prompt_text"] = enforce_production_prompt(prompt_text)
 
-    return render(request, "pages/category.html", {
+    return render(request, "prompts.html", {
         "data": data,
         "domains": domains,
         "selected_domain": selected_domain,

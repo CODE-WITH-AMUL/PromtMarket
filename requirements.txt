@@ -10,9 +10,8 @@ django-ratelimit==4.1.0
 # Static files
 whitenoise==6.12.0
 
-
-
-# MongoDB (recommended way)
+# MongoDB
+djongo==1.3.6
 pymongo==4.8.0
 dnspython==2.6.1
 

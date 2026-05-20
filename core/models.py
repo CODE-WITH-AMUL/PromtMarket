@@ -15,6 +15,9 @@ PRODUCTION_PROMPT_REQUIREMENTS = (
 
 
 def enforce_production_prompt(text: str) -> str:
+    """
+    Append production requirements only once.
+    """
     if not text:
         return text
 
@@ -26,33 +29,91 @@ def enforce_production_prompt(text: str) -> str:
 
 
 class TimeStampModel(models.Model):
+    """
+    Base model for automatic timestamps.
+    """
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     class Meta:
         abstract = True
 
+
 class Promt(TimeStampModel):
-    title = models.CharField(max_length=255, db_index=True)
+    title = models.CharField(
+        max_length=255,
+        db_index=True
+    )
+
     description = models.TextField()
-    image = models.ImageField(upload_to='prompts/', null=True, blank=True)
-    slug = models.SlugField(unique=True, db_index=True)
+
+    image = models.ImageField(
+        upload_to="prompts/",
+        null=True,
+        blank=True
+    )
+
+    slug = models.SlugField(
+        unique=True,
+        db_index=True,
+        blank=True
+    )
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ["-created_at"]
+        verbose_name = "Prompt"
+        verbose_name_plural = "Prompts"
 
     def clean(self):
-        if self.image and self.image.size > 5 * 1024 * 1024:
-            raise ValidationError({'image': 'Image file must be less than or equal to 5MB.'})
-    
+        """
+        Custom validation.
+        """
+
+        if self.image:
+            max_size = 5 * 1024 * 1024
+
+            if self.image.size > max_size:
+                raise ValidationError({
+                    "image": "Image must be less than or equal to 5MB."
+                })
+
+    def generate_unique_slug(self):
+        """
+        Generate unique slug:
+        Example:
+        ai-builder
+        ai-builder-1
+        ai-builder-2
+        """
+
+        base_slug = slugify(self.title)
+        slug = base_slug
+        counter = 1
+
+        while Promt.objects.filter(slug=slug).exclude(
+            pk=self.pk
+        ).exists():
+
+            slug = f"{base_slug}-{counter}"
+            counter += 1
+
+        return slug
+
     def save(self, *args, **kwargs):
-        # Ensure every stored prompt description asks for production-level output.
-        self.description = enforce_production_prompt(self.description)
-        if not self.slug and self.title:
-            self.slug = slugify(self.title)
+        """
+        Override save method.
+        """
+
+        self.description = enforce_production_prompt(
+            self.description
+        )
+
+        if not self.slug:
+            self.slug = self.generate_unique_slug()
+
         self.full_clean()
+
         super().save(*args, **kwargs)
-    
-    
+
     def __str__(self):
         return self.title

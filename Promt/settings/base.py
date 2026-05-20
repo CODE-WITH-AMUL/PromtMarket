@@ -86,14 +86,11 @@ TEMPLATES = [
 # ---------------- DATABASE ----------------
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": env("DATABASE_ENGINE"),
         "NAME": env("DATABASE_NAME"),
-        "USER": env("DATABASE_USER"),
-        "PASSWORD": env("DATABASE_PASSWORD"),
-        "HOST": env("DATABASE_HOST"),
-        "PORT": env("DATABASE_PORT"),
-        "CONN_MAX_AGE": env.int("DB_CONN_MAX_AGE"),
-        "ATOMIC_REQUESTS": env.bool("DB_ATOMIC_REQUESTS"),
+        "CLIENT": {
+            "host": env("MONGO_URI")
+        }
     }
 }
 # ---------------- PASSWORDS ----------------

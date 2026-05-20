@@ -52,7 +52,7 @@ INSTALLED_APPS = [
 # ---------------- MIDDLEWARE ----------------
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # MUST be right after SecurityMiddleware
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -83,16 +83,20 @@ TEMPLATES = [
     },
 ]
 
-# ---------------- DATABASE ----------------
+# ---------------- DATABASE (PostgreSQL) ----------------
 DATABASES = {
     "default": {
         "ENGINE": env("DATABASE_ENGINE"),
         "NAME": env("DATABASE_NAME"),
-        "CLIENT": {
-            "host": env("MONGO_URI")
-        }
+        "USER": env("DATABASE_USER"),
+        "PASSWORD": env("DATABASE_PASSWORD"),
+        "HOST": env("DATABASE_HOST"),
+        "PORT": env("DATABASE_PORT"),
     }
 }
+
+
+
 # ---------------- PASSWORDS ----------------
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
@@ -114,16 +118,14 @@ TIME_ZONE = "Asia/Kathmandu"
 USE_I18N = True
 USE_TZ = True
 
-# ---------------- STATIC FILES (FIXED FOR RENDER) ----------------
+# ---------------- STATIC FILES ----------------
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
-
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 # ---------------- MEDIA ----------------
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
-
-    
 
 # ---------------- AUTH ----------------
 LOGIN_URL = "login"
@@ -142,6 +144,15 @@ CSRF_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SAMESITE = "Lax"
 
 CORS_ALLOW_ALL_ORIGINS = False
+
+# Production security
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 
 # ---------------- UPLOAD LIMITS ----------------
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 2000

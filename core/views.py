@@ -27,7 +27,7 @@ def health_check(request):
 
 @login_required
 def show_prompts(request):
-    csv_path = BASE_DIR / 'Dataset' / 'prompts_production_ready.csv'
+    csv_path = BASE_DIR / 'Dataset' / 'cleaned_datasets.csv'
     selected_domain = request.GET.get("domain")
     rows, domains = get_prompt_catalog(csv_path, selected_domain)
 

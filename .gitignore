@@ -158,10 +158,10 @@ credentials.json
 # ---------------------
 celerybeat-schedule
 
-# ---------------------
-# Dataset
-# ---------------------
-/Dataset/
+# # ---------------------
+# # Dataset
+# # ---------------------
+# /Dataset/
 
 # ---------------------
 # Ignore generated prompt outputs only

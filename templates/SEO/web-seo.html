@@ -1,0 +1,33 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="{{ seo_description|default:'Browse high-quality AI prompts for ChatGPT, Claude, Midjourney, Gemini, and more.' }}">
+<meta name="keywords" content="{{ seo_keywords|default:'AI prompts, ChatGPT prompts, Claude prompts, Midjourney prompts, Gemini prompts, prompt marketplace, prompt library' }}">
+<link rel="canonical" href="{{ canonical_url|default:request.build_absolute_uri }}">
+<meta name="robots" content="{{ seo_robots|default:'index, follow' }}">
+<meta name="author" content="Prompt Market">
+<meta property="og:type" content="{{ seo_og_type|default:'website' }}">
+<meta property="og:url" content="{{ canonical_url|default:request.build_absolute_uri }}">
+<meta property="og:site_name" content="Prompt Market">
+<meta property="og:title" content="{{ seo_og_title|default:seo_title|default:'Prompt Market — Discover & Share AI Prompts' }}">
+<meta property="og:description" content="{{ seo_og_description|default:seo_description|default:'Browse high-quality AI prompts for ChatGPT, Claude, Midjourney, Gemini, and more.' }}">
+{% if seo_og_image %}
+<meta property="og:image" content="{{ seo_og_image }}">
+{% else %}
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}/static/images/og-default.png">
+{% endif %}
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Prompt Market — AI Prompt Discovery Platform">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@promptmarket">
+<meta name="twitter:creator" content="@promptmarket">
+<meta name="twitter:title" content="{{ seo_twitter_title|default:seo_title|default:'Prompt Market — AI Prompt Discovery' }}">
+<meta name="twitter:description" content="{{ seo_twitter_description|default:seo_description|default:'Find the best AI prompts for ChatGPT, Claude, Midjourney, and Gemini.' }}">
+{% if seo_twitter_image %}
+<meta name="twitter:image" content="{{ seo_twitter_image }}">
+{% elif seo_og_image %}
+<meta name="twitter:image" content="{{ seo_og_image }}">
+{% else %}
+<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}/static/images/og-default.png">
+{% endif %}

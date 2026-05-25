@@ -6,6 +6,9 @@ import os
 # in the environment provided by the host.
 DEBUG = False
 
+if not ALLOWED_HOSTS:
+	raise RuntimeError("ALLOWED_HOSTS must be set for production settings")
+
 # Ensure Django knows it's behind a proxy/load-balancer
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 

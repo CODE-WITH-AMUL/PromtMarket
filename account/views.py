@@ -44,9 +44,18 @@ def login_account_view(request):
         email = form.cleaned_data['email'].strip().lower()
         password = form.cleaned_data['password']
 
-        user_obj = User.objects.filter(email=email).first()
-        username = user_obj.username if user_obj else email
-        user = authenticate(request, username=username, password=password)
+        try:
+            username = (
+                User.objects.filter(email=email)
+                .values_list('username', flat=True)
+                .first()
+                or email
+            )
+            user = authenticate(request, username=username, password=password)
+        except Exception:
+            logger.exception('Unexpected error during login for email=%s', email)
+            messages.error(request, 'Could not sign in right now. Please try again.')
+            return redirect('login')
 
         if user is None:
             messages.error(request, 'Invalid email or password.')
@@ -74,8 +83,13 @@ def register_view(request):
         email = form.cleaned_data['email'].strip().lower()
         password = form.cleaned_data['password']
 
-        if User.objects.filter(email=email).exists():
-            messages.error(request, 'Email already exists.')
+        try:
+            if User.objects.filter(email=email).exists():
+                messages.error(request, 'Email already exists.')
+                return redirect('register')
+        except Exception:
+            logger.exception('Unexpected error during registration lookup for email=%s', email)
+            messages.error(request, 'Could not create account right now. Please try again.')
             return redirect('register')
 
         username = _build_unique_username(email)
@@ -88,6 +102,10 @@ def register_view(request):
             )
         except IntegrityError:
             messages.error(request, 'Could not create account. Try again.')
+            return redirect('register')
+        except Exception:
+            logger.exception('Unexpected error creating account for email=%s', email)
+            messages.error(request, 'Could not create account right now. Please try again.')
             return redirect('register')
 
         login(request, user)

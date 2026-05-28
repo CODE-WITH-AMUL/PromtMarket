@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from urllib.parse import urlsplit
 import environ
@@ -15,8 +16,22 @@ env = environ.Env(
 
 environ.Env.read_env(str(BASE_DIR / ".env"))
 
-SECRET_KEY = env("SECRET_KEY")
-DEBUG = env.bool("DEBUG", default=False)
+DJANGO_ENV = os.getenv("DJANGO_ENV", env("DJANGO_ENV", default="development")).lower()
+
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    if DJANGO_ENV == "production":
+        raise RuntimeError("SECRET_KEY must be set in production")
+    SECRET_KEY = "django-insecure-development-only-key"
+
+debug_value = os.getenv("DEBUG")
+if debug_value is None:
+    DEBUG = env.bool("DEBUG", default=False)
+else:
+    DEBUG = debug_value.strip().lower() in {"1", "true", "yes", "on"}
+
+if DJANGO_ENV == "production" and DEBUG:
+    raise RuntimeError("DEBUG must be disabled in production")
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 

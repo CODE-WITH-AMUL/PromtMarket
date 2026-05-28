@@ -1,10 +1,20 @@
-from .base import *  # noqa: F403, F401
+from . import base as base_settings
 import os
+
+
+for setting_name in dir(base_settings):
+	if setting_name.isupper():
+		globals()[setting_name] = getattr(base_settings, setting_name)
+
+ALLOWED_HOSTS = base_settings.ALLOWED_HOSTS
 
 # Production security settings — intentionally set here (not from .env)
 # These are flags, not secrets. Keep secret values (SECRET_KEY, DB creds)
 # in the environment provided by the host.
 DEBUG = False
+
+if not os.getenv("SECRET_KEY"):
+	raise RuntimeError("SECRET_KEY must be set for production settings")
 
 if not ALLOWED_HOSTS:
 	raise RuntimeError("ALLOWED_HOSTS must be set for production settings")

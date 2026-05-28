@@ -1,8 +1,12 @@
 from pathlib import Path
+import logging
 
 import polars as pl
 from django.core.cache import cache
 from django.conf import settings
+
+
+logger = logging.getLogger(__name__)
 
 
 def _get_cache_key(csv_path: Path) -> str:
@@ -19,7 +23,12 @@ def _load_rows(csv_path: Path) -> list[dict]:
     if cached_rows is not None:
         return cached_rows
 
-    df = pl.read_csv(csv_path)
+    try:
+        df = pl.read_csv(csv_path)
+    except Exception:
+        logger.exception("Failed to load prompt catalog from %s", csv_path)
+        return []
+
     if "Domain" in df.columns:
         df = df.rename({"Domain": "domain"})
     if "domain" not in df.columns:
